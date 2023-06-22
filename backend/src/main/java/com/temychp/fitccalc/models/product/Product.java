@@ -1,5 +1,6 @@
 package com.temychp.fitccalc.models.product;
 
+import com.temychp.fitccalc.models.PersonProductByDay;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -12,7 +13,7 @@ import java.util.List;
 @Builder
 @Setter
 @Getter
-@ToString
+@ToString(exclude = {"personProducts"})
 @Entity
 @Table(name = "product")
 public final class Product {
@@ -42,5 +43,8 @@ public final class Product {
     @NotEmpty
     @Column(name="created_person_id")
     private Long createdUserId;
+
+    @OneToMany(mappedBy = "product")
+    private List<PersonProductByDay> personProducts;
 
 }

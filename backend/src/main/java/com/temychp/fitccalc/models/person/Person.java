@@ -1,5 +1,6 @@
 package com.temychp.fitccalc.models.person;
 
+import com.temychp.fitccalc.models.PersonProductByDay;
 import com.temychp.fitccalc.models.product.Product;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -14,7 +15,7 @@ import java.util.List;
 @Builder
 @Setter
 @Getter
-@ToString
+@ToString(exclude = {"personAnthropometry", "personActivity", "personProducts",})
 @Entity
 @Table(name = "person")
 public final class Person {
@@ -43,20 +44,23 @@ public final class Person {
     private Instant changedAt;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role")
     private Role role;
 
-    @OneToOne(mappedBy = "person")
-    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @OneToOne(
+            mappedBy = "person",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            optional = false)
     private PersonAnthropometry personAnthropometry;
 
-    @OneToMany(mappedBy = "productId")
-    private List<Person> people;
+    @OneToOne(
+            mappedBy = "person",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            optional = false)
+    private PersonActivity personActivity;
 
-    @OneToMany(mappedBy = "personId")
-    private List<Product> products;
-
-    @OneToMany(mappedBy = "createdUserId")
-    private List<Product> createdProducts;
+    @OneToMany(mappedBy = "person")
+    private List<PersonProductByDay> personProducts;
 
 }

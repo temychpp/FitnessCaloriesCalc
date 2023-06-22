@@ -1,9 +1,19 @@
-version: '3.7'
+version: '3.8'
 services:
-  db:
-    container_name: db
+  db-fcc:
+    container_name: db-fcc
     image: postgres
     environment:
       POSTGRES_PASSWORD: mysecretpassword
     ports:
       - 5432:5432
+
+  backend:
+    build:
+      context: backend
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db-fcc:5432/postgres
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: mysecretpassword
+    depends_on:
+      - db-fcc

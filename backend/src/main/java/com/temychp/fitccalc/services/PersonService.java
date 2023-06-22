@@ -1,6 +1,7 @@
 package com.temychp.fitccalc.services;
 
 import com.temychp.fitccalc.models.person.Person;
+import com.temychp.fitccalc.models.product.Product;
 import com.temychp.fitccalc.repositories.PersonRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,9 +45,8 @@ public class PersonService {
         personRepository.deleteById(id);
     }
 
-    public Person findByName(String name) {
-        Optional<Person> foundUser = personRepository.findByName(name);
-        return foundUser.orElse(null);
+    public Optional<Person> findByName(String name) {
+        return personRepository.findByName(name);
     }
 
 }

@@ -45,8 +45,12 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
-    public Optional<Product> findBookByName(String name) {
+    public Optional<Product> findByName(String name) {
         return productRepository.findByName(name);
+    }
+
+    public List<Product> searchProduct(String startString) {
+        return productRepository.findByNameStartingWithIgnoreCase(startString);
     }
 
 }

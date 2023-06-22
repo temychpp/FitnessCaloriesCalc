@@ -34,8 +34,13 @@ public final class PersonAnthropometry {
     @Column(name = "height")
     private Integer height;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "person_id", referencedColumnName = "id")
     private Person person;
+
+    public void setPerson(Person person) {
+        person.setPersonAnthropometry(this);
+        this.person = person;
+    }
 
 }
