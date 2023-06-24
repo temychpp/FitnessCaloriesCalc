@@ -39,12 +39,13 @@ public class PersonProductByDay {
     @Enumerated(EnumType.STRING)
     private Meal meal;
 
-public void setPerson(Person person) {
-    this.person=person;
-    this.person.getPersonProducts().add(this);
-}
+    public void setPerson(Person person) {
+        this.person = person;
+        this.person.getPersonProducts().add(this);
+    }
+
     public void setProduct(Product product) {
-        this.product=product;
+        this.product = product;
         this.product.getPersonProducts().add(this);
     }
 
