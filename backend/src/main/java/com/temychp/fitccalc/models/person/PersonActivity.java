@@ -28,8 +28,12 @@ public final class PersonActivity {
     @Column(name = "aerobics_by_day")
     private Long aerobicsByDay;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "person_id", referencedColumnName = "id")
     private Person person;
 
+    public void setPerson(Person person) {
+        person. setPersonActivity(this);
+        this.person = person;
+    }
 }

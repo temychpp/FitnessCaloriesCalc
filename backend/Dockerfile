@@ -1,6 +1,6 @@
 FROM eclipse-temurin:17-jdk-alpine AS build
 WORKDIR application
-COPY build/libs/db-*-SNAPSHOT.jar app.jar
+COPY target/backend-*-SNAPSHOT.jar app.jar
 RUN java -Djarmode=layertools -jar app.jar extract
 
 FROM eclipse-temurin:17-jdk-alpine

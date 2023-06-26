@@ -10,6 +10,4 @@
 
 We do not support multi-language support at this stage.
 
-[//]: # (## Structural diagrams)
-
-[//]: # (![Structural diagram]&#40;img/c4-scructural-diagram.png&#41;)
+![Structural diagram](images/fcc.png)

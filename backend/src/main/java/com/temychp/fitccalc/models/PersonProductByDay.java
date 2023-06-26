@@ -14,8 +14,8 @@ import java.time.Instant;
 @Getter
 @ToString
 @Entity
-@Table(name = "day")
-public class PersonDayMeal {
+@Table(name = "day_meal")
+public class PersonProductByDay {
 
     @Id
     @Column(name = "id")
@@ -38,5 +38,15 @@ public class PersonDayMeal {
 
     @Enumerated(EnumType.STRING)
     private Meal meal;
+
+    public void setPerson(Person person) {
+        this.person = person;
+        this.person.getPersonProducts().add(this);
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+        this.product.getPersonProducts().add(this);
+    }
 
 }

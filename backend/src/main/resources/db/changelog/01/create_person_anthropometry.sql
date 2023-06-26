@@ -5,5 +5,5 @@ CREATE TABLE person_anthropometry
     age       INT,
     weight    REAL,
     height    INT,
-    person_id BIGINT UNIQUE REFERENCES person (id) ON DELETE CASCADE
+    person_id BIGINT NOT NULL UNIQUE REFERENCES person (id) ON DELETE CASCADE
 );
