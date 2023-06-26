@@ -6,7 +6,7 @@ services:
     environment:
       POSTGRES_PASSWORD: mysecretpassword
     ports:
-      - 5432:5432
+      - '5432:5432'
 
   backend:
     build:
@@ -17,3 +17,15 @@ services:
       SPRING_DATASOURCE_PASSWORD: mysecretpassword
     depends_on:
       - db-fcc
+
+  front:
+    build:
+      dockerfile: Dockerfile
+      context: front
+    ports:
+      - '3000:3000'
+    volumes:
+      - /app/node_modules
+      - ./front:/app
+    stdin_open: true
+    tty: true
