@@ -1,11 +1,11 @@
 package com.temychp.fitccalc.models.person;
 
 import com.temychp.fitccalc.models.PersonProductByDay;
-import com.temychp.fitccalc.models.product.Product;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.*;
-import org.hibernate.annotations.Cascade;
 
 import java.time.Instant;
 import java.util.List;
@@ -46,18 +46,15 @@ public final class Person {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToOne(
-            mappedBy = "person",
-            cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY,
-            optional = false)
+    @Embedded
     private PersonAnthropometry personAnthropometry;
 
-    @OneToOne(
-            mappedBy = "person",
-            cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY,
-            optional = false)
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride( name = "stepsByDay", column = @Column(name = "steps_by_day")),
+            @AttributeOverride( name = "fitnessByDay", column = @Column(name = "fitness_by_day")),
+            @AttributeOverride( name = "aerobicsByDay", column = @Column(name = "aerobics_by_day"))
+    })
     private PersonActivity personActivity;
 
     @OneToMany(mappedBy = "person")

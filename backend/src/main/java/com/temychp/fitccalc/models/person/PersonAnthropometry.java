@@ -1,7 +1,5 @@
 package com.temychp.fitccalc.models.person;
 
-import com.temychp.fitccalc.models.person.Gender;
-import com.temychp.fitccalc.models.person.Person;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import lombok.*;
@@ -12,16 +10,11 @@ import lombok.*;
 @Setter
 @Getter
 @ToString
-@Entity
-@Table(name = "person_anthropometry")
+@Embeddable
 public final class PersonAnthropometry {
 
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @Enumerated(EnumType.STRING)
+    @Column(name = "gender")
     private Gender gender;
 
     @Min(value = 0, message = "Age should be greater than 0")
@@ -33,14 +26,5 @@ public final class PersonAnthropometry {
 
     @Column(name = "height")
     private Integer height;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "person_id", referencedColumnName = "id")
-    private Person person;
-
-    public void setPerson(Person person) {
-        person.setPersonAnthropometry(this);
-        this.person = person;
-    }
 
 }

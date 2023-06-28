@@ -1,5 +1,6 @@
 package com.temychp.fitccalc.dto;
 
+import com.temychp.fitccalc.models.person.PersonActivity;
 import com.temychp.fitccalc.models.person.PersonAnthropometry;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
@@ -16,5 +17,7 @@ public final class PersonDto {
     private String email;
 
     private PersonAnthropometry personAnthropometry;
+
+    private PersonActivity personActivity;
 
 }
