@@ -1,7 +1,6 @@
 package com.temychp.fitccalc.services;
 
 import com.temychp.fitccalc.models.person.Person;
-import com.temychp.fitccalc.models.product.Product;
 import com.temychp.fitccalc.repositories.PersonRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-
 
 @Slf4j
 @AllArgsConstructor

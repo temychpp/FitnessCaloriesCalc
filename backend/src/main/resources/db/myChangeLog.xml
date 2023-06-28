@@ -12,16 +12,6 @@
                  splitStatements="true"
                  stripComments="true"/>
 
-        <sqlFile path="changelog/01/create_person_anthropometry.sql"
-                 relativeToChangelogFile="true"
-                 splitStatements="true"
-                 stripComments="true"/>
-
-        <sqlFile path="changelog/01/create_person_activity.sql"
-                 relativeToChangelogFile="true"
-                 splitStatements="true"
-                 stripComments="true"/>
-
         <sqlFile path="changelog/01/create_product.sql"
                  relativeToChangelogFile="true"
                  splitStatements="true"

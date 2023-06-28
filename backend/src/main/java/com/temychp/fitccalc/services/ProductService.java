@@ -1,10 +1,9 @@
 package com.temychp.fitccalc.services;
 
+import com.temychp.fitccalc.dao.ProductDAO;
 import com.temychp.fitccalc.models.product.Product;
 import com.temychp.fitccalc.repositories.ProductRepository;
-
 import lombok.AllArgsConstructor;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +18,8 @@ import java.util.Optional;
 public class ProductService {
 
     private final ProductRepository productRepository;
+
+    private final ProductDAO productDAO;
 
     public List<Product> findAll() {
         return productRepository.findAll();
@@ -49,8 +50,17 @@ public class ProductService {
         return productRepository.findByName(name);
     }
 
-    public List<Product> searchProduct(String startString) {
+    public List<Product> showProductsStartingWith(String startString) {
         return productRepository.findByNameStartingWithIgnoreCase(startString);
     }
+
+    public List<Product> showProductsCreatedByPersonIdOrderByName(Long id) {
+        return productDAO.showProductsCreatedByPersonOrderByName(id);
+    }
+
+    public List<Product> showProductsOrderByMinCalories(int count) {
+        return productDAO.showProductsOrderByMinCalories(count);
+    }
+
 
 }
