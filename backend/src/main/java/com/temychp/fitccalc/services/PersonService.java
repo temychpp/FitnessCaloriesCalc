@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,7 +30,15 @@ public class PersonService {
 
     @Transactional
     public void save(Person person) {
+        enrichPerson(person);
         personRepository.save(person);
+    }
+
+    private void enrichPerson(Person person) {
+        if (person.getCreatedAt() == null) {
+            person.setCreatedAt(Instant.now());
+        }
+        person.setChangedAt(Instant.now());
     }
 
     @Transactional
