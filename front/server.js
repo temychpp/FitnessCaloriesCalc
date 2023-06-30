@@ -8,7 +8,7 @@ app.use(cors());
 e.g. read jsons from stubs folder
  */
 
-app.use('/anthro', (req, res) => {
+app.use('/person/anthro', (req, res) => {
     res.send({
         gender: 'мужской',
         age: '42',
