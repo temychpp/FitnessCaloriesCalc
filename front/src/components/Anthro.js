@@ -17,7 +17,7 @@ async function getAnthro(userId) {
 
 async function postAnthro(formData, id) {
     // todo move rest configs to separate file
-    return fetch('http://localhost:8080/person/anthro', {
+    return fetch('http://localhost:8080/person/anthro?id=', +id, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -37,23 +37,23 @@ async function postAnthro(formData, id) {
 
 export default function Anthro() {
 
-    const [ form ] = Form.useForm()
+    const [form] = Form.useForm()
 
     useEffect(() => {
         // if (fields.is_loaded === false) {
-            getAnthro(1).then(result => {
-                form.setFieldValue('age', result.age)
-                form.setFieldValue('gender', result.gender)
-                form.setFieldValue('height', result.height)
-                form.setFieldValue('weight', result.weight)
-            })
+        getAnthro(1).then(result => {
+            form.setFieldValue('age', result.age)
+            form.setFieldValue('gender', result.gender)
+            form.setFieldValue('height', result.height)
+            form.setFieldValue('weight', result.weight)
+        })
         // }
     }, []);
 
     const onFinish = (values) => {
         postAnthro(values, 1)
-    }
 
+    }
     return (<>
         <h1>Антропометрия</h1>
         <Form
@@ -88,9 +88,15 @@ export default function Anthro() {
             >
                 <Input/>
             </Form.Item>
+
             <Button type="primary" htmlType="submit">
                 Сохранить
             </Button>
+
+            <button onClick={() => postAnthro({form},1)}>send1</button>
+            <button onClick={() => getAnthro(1)}>send2</button>
+
+
         </Form>
     </>)
 }

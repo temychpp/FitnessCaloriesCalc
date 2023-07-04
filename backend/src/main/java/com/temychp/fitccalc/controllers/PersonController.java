@@ -1,9 +1,11 @@
 package com.temychp.fitccalc.controllers;
 
+import com.temychp.fitccalc.dto.PersonActivityDto;
 import com.temychp.fitccalc.dto.PersonAnthropometryDto;
 import com.temychp.fitccalc.dto.PersonDto;
 import com.temychp.fitccalc.models.person.Person;
 import com.temychp.fitccalc.services.PersonService;
+import com.temychp.fitccalc.util.convertors.PersonActivityConvertor;
 import com.temychp.fitccalc.util.convertors.PersonAnthroConvertor;
 import com.temychp.fitccalc.util.convertors.PersonConvertor;
 import com.temychp.fitccalc.util.exceptions.PersonDuplicateException;
@@ -27,6 +29,9 @@ public class PersonController {
 
     private final PersonAnthroConvertor personAnthroConvertor;
 
+    private final PersonActivityConvertor personActivityConvertor;
+
+
     @PostMapping
     public ResponseEntity<PersonDto> create(@RequestBody @Valid PersonDto personDto) {
         ResponseEntity<PersonDto> result;
@@ -45,7 +50,7 @@ public class PersonController {
 
         } catch (Exception e) {
             result = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-            log.info("Ошибка сервера! {}", e.getMessage());
+            log.error("Ошибка сервера! {}", e.getMessage());
         }
         return result;
     }
@@ -82,9 +87,32 @@ public class PersonController {
 
         } catch (Exception e) {
             result = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-            log.info("Ошибка сервера! {}", e.getMessage());
+            log.error("Ошибка сервера! {}", e.getMessage());
         }
         return result;
     }
 
+    @GetMapping("/activity")
+    public PersonActivityDto getActivity(@RequestParam(value = "id") Long id) {
+        return personActivityConvertor.ModelToDto(personService.findOne(id).getPersonActivity());
+    }
+
+    @PostMapping("/activity")
+    public ResponseEntity<PersonActivityDto> updateActivity(
+            @RequestParam(value = "id") Long id,
+            @RequestBody PersonActivityDto personActivityDto) {
+        ResponseEntity<PersonActivityDto> result;
+        try {
+            Person person = personService.findOne(id);
+            person.setPersonActivity(personActivityConvertor.DtoToModel(personActivityDto));
+            personService.save(person);
+            result = ResponseEntity.status(HttpStatus.OK).build();
+            log.info("Активность пользователя{} сохранена в базу: {}", id, personActivityDto);
+
+        } catch (Exception e) {
+            result = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            log.error("Ошибка сервера! {}", e.getMessage());
+        }
+        return result;
+    }
 }

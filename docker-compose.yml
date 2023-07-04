@@ -11,6 +11,8 @@ services:
   backend:
     build:
       context: backend
+    ports:
+      - '8080:8085'
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db-fcc:5432/postgres
       SPRING_DATASOURCE_USERNAME: postgres
