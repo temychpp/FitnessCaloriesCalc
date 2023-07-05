@@ -110,9 +110,9 @@ public class PersonService {
 
         double result;
         if (person.getPersonAnthropometry().getGender() == Gender.MALE) {
-            result = height - 100 - ((height - 150) / 4);
+            result = height - 100 - ((height - 150) / 4.0);
         } else
-            result = height - 100 - ((height - 150) / 2);
+            result = height - 100 - ((height - 150) / 2.0);
         return result;
     }
 
