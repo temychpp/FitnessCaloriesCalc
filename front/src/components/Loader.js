@@ -6,11 +6,11 @@ import LoadingBar from "react-top-loading-bar";
 export default function Loader() {
     const [percent, setPercent] = useState(0);
 
-    useCustomEventListener('start-loading', (data) => {
+    useCustomEventListener('start-loading', (_) => {
         setPercent(50);
     })
 
-    useCustomEventListener('loaded', (data) => {
+    useCustomEventListener('loaded', (_) => {
         setPercent(100);
     })
 
