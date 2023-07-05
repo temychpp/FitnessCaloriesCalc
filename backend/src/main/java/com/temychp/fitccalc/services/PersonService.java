@@ -86,8 +86,7 @@ public class PersonService {
         float weight = person.getPersonAnthropometry().getWeight();
         int height = person.getPersonAnthropometry().getHeight();
         int age = person.getPersonAnthropometry().getAge();
-//        double activityCoefficient = person.getPersonActivity().getActivityCoefficient().getActivityCoefficientValue();
-        double activityCoefficient = 1.2;
+        double activityCoefficient = person.getPersonActivity().getActivityCoefficient().getActivityCoefficientValue();
 
         int result;
         if (person.getPersonAnthropometry().getGender() == Gender.MALE) {

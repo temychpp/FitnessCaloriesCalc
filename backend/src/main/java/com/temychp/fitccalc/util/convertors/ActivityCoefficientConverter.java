@@ -9,11 +9,11 @@ public class ActivityCoefficientConverter implements AttributeConverter<Activity
 
     @Override
     public Double convertToDatabaseColumn(ActivityCoefficient attribute) {
-        return attribute.  getActivityCoefficientValue();
+        return attribute.getActivityCoefficientValue();
     }
 
     @Override
     public ActivityCoefficient convertToEntityAttribute(Double dbData) {
-        return  ActivityCoefficient.ONE;// valueOf(String.valueOf(dbData));
+        return  ActivityCoefficient.valueOfFromDouble(dbData);
     }
 }
