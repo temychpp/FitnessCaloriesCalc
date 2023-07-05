@@ -1,8 +1,11 @@
 import React, {useEffect} from 'react';
 import {Button, Form, Select, Input} from 'antd'
+import {emitCustomEvent} from "react-custom-events";
+
 
 async function getAnthro(userId) {
     // todo move rest configs to separate file
+    emitCustomEvent('start-loading');
     return fetch('http://localhost:8080/person/anthro?id=' + userId, {
         method: 'GET',
         headers: {
@@ -11,12 +14,16 @@ async function getAnthro(userId) {
     })
         .then(data => data.json())
         .catch(_ => null)
+        .finally(data => {
+            emitCustomEvent('loaded');
+        })
     // todo catch and show exceptions
 }
 
 
 async function postAnthro(formData, id) {
     // todo move rest configs to separate file
+    emitCustomEvent('start-loading');
     return fetch('http://localhost:8080/person/anthro', {
         method: 'POST',
         headers: {
@@ -32,6 +39,9 @@ async function postAnthro(formData, id) {
     })
         .then(data => data.json())
         .catch(_ => null)
+        .finally(data => {
+            emitCustomEvent('loaded');
+        })
     // todo catch and show exceptions
 }
 
