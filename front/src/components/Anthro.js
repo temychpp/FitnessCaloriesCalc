@@ -1,8 +1,11 @@
 import React, {useEffect} from 'react';
 import {Button, Form, Select, Input} from 'antd'
+import {emitCustomEvent} from "react-custom-events";
+
 
 async function getAnthro(userId) {
     // todo move rest configs to separate file
+    emitCustomEvent('start-loading');
     return fetch('http://localhost:8080/person/anthro?id=' + userId, {
         method: 'GET',
         headers: {
@@ -11,13 +14,17 @@ async function getAnthro(userId) {
     })
         .then(data => data.json())
         .catch(_ => null)
+        .finally(data => {
+            emitCustomEvent('loaded');
+        })
     // todo catch and show exceptions
 }
 
 
 async function postAnthro(formData, id) {
     // todo move rest configs to separate file
-    return fetch('http://localhost:8080/person/anthro?id=', +id, {
+    emitCustomEvent('start-loading');
+    return fetch('http://localhost:8080/person/anthro', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -32,28 +39,31 @@ async function postAnthro(formData, id) {
     })
         .then(data => data.json())
         .catch(_ => null)
+        .finally(data => {
+            emitCustomEvent('loaded');
+        })
     // todo catch and show exceptions
 }
 
 export default function Anthro() {
 
-    const [form] = Form.useForm()
+    const [ form ] = Form.useForm()
 
     useEffect(() => {
         // if (fields.is_loaded === false) {
-        getAnthro(1).then(result => {
-            form.setFieldValue('age', result.age)
-            form.setFieldValue('gender', result.gender)
-            form.setFieldValue('height', result.height)
-            form.setFieldValue('weight', result.weight)
-        })
+            getAnthro(1).then(result => {
+                form.setFieldValue('age', result.age)
+                form.setFieldValue('gender', result.gender)
+                form.setFieldValue('height', result.height)
+                form.setFieldValue('weight', result.weight)
+            })
         // }
     }, []);
 
     const onFinish = (values) => {
         postAnthro(values, 1)
-
     }
+
     return (<>
         <h1>Антропометрия</h1>
         <Form
@@ -88,15 +98,9 @@ export default function Anthro() {
             >
                 <Input/>
             </Form.Item>
-
             <Button type="primary" htmlType="submit">
                 Сохранить
             </Button>
-
-            <button onClick={() => postAnthro({form},1)}>send1</button>
-            <button onClick={() => getAnthro(1)}>send2</button>
-
-
         </Form>
     </>)
 }
