@@ -1,30 +1,32 @@
 import React, {useEffect} from 'react';
 import {Button, Form, Select, Input} from 'antd'
 import {emitCustomEvent} from "react-custom-events";
+import fetchWithTimeout from "../core/fetchWithTimeout";
 
+const emitLoadingError = (message) => {
+    emitCustomEvent('error-event', message);
+}
 
 async function getAnthro(userId) {
     // todo move rest configs to separate file
     emitCustomEvent('start-loading');
-    return fetch('http://localhost:8080/person/anthro?id=' + userId, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-        .then(data => data.json())
-        .catch(_ => null)
-        .finally(data => {
+    return fetchWithTimeout('http://localhost:8080/pe111rson/anthro?id=' + userId,
+        {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(data => data.json())
+        .finally(_ => {
             emitCustomEvent('loaded');
         })
-    // todo catch and show exceptions
 }
 
 
 async function postAnthro(formData, id) {
     // todo move rest configs to separate file
     emitCustomEvent('start-loading');
-    return fetch('http://localhost:8080/person/anthro', {
+    return fetchWithTimeout('http://localhost:8080/person/anthro', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -38,30 +40,28 @@ async function postAnthro(formData, id) {
         })
     })
         .then(data => data.json())
-        .catch(_ => null)
-        .finally(data => {
+        .finally(_ => {
             emitCustomEvent('loaded');
         })
-    // todo catch and show exceptions
 }
 
 export default function Anthro() {
 
-    const [ form ] = Form.useForm()
+    const [form] = Form.useForm()
 
     useEffect(() => {
-        // if (fields.is_loaded === false) {
-            getAnthro(1).then(result => {
-                form.setFieldValue('age', result.age)
-                form.setFieldValue('gender', result.gender)
-                form.setFieldValue('height', result.height)
-                form.setFieldValue('weight', result.weight)
-            })
-        // }
+
+        getAnthro(1).then(result => {
+            form.setFieldValue('age', result.age)
+            form.setFieldValue('gender', result.gender)
+            form.setFieldValue('height', result.height)
+            form.setFieldValue('weight', result.weight)
+        }).catch(_ => emitLoadingError('Ошибка загрузки антропометрии'))
     }, []);
 
     const onFinish = (values) => {
         postAnthro(values, 1)
+            .catch(_ => emitLoadingError('Ошибка сохранения антропометрии'))
     }
 
     return (<>

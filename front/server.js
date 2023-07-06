@@ -17,4 +17,8 @@ app.use('/person/anthro', (req, res) => {
     })
 })
 
+app.use('/500/person/anthro', (req, res) => {
+    res.status(500).send()
+})
+
 app.listen(8080, () => console.log('REST API is running on http://localhost:8080'));
