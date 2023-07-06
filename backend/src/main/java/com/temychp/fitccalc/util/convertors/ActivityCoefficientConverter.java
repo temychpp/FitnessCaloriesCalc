@@ -3,7 +3,9 @@ package com.temychp.fitccalc.util.convertors;
 import com.temychp.fitccalc.models.person.ActivityCoefficient;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Converter
 public class ActivityCoefficientConverter implements AttributeConverter<ActivityCoefficient, Double> {
 
@@ -14,6 +16,7 @@ public class ActivityCoefficientConverter implements AttributeConverter<Activity
 
     @Override
     public ActivityCoefficient convertToEntityAttribute(Double dbData) {
-        return  ActivityCoefficient.valueOfFromDouble(dbData);
+        log.info("convertToEntityAttribute dbData={}", dbData);
+        return ActivityCoefficient.valueOfFromDouble(dbData);
     }
 }

@@ -3,7 +3,9 @@ package com.temychp.fitccalc.dto;
 import com.temychp.fitccalc.models.person.PersonActivity;
 import com.temychp.fitccalc.models.person.PersonAnthropometry;
 import jakarta.validation.constraints.NotEmpty;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 @Setter
 @Getter

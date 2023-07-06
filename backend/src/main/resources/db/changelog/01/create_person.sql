@@ -11,7 +11,7 @@ CREATE TABLE person
     age                  INT,
     weight               REAL,
     height               INT,
-    activity_coefficient REAL,
+    activity_coefficient CHAR(10),
     steps_by_day         INT,
     fitness_by_day       INT,
     aerobics_by_day      INT
@@ -19,5 +19,5 @@ CREATE TABLE person
 
 INSERT INTO person(name, email, password, role, gender, age, weight, height,
                    activity_coefficient, steps_by_day, fitness_by_day, aerobics_by_day)
-VALUES ('Tem', 'tem@mail.ru', 'tem', 'ADMIN', 'MALE', 35, 99.9, 186, 1.2, 1000, 30, 30),
-       ('Ivan', 'ivan@gmail.com', 'ivan', 'USER', 'MALE', 30, 99.9, 190, 1.9, 10000, 20, 20);
+VALUES ('Tem', 'tem@mail.ru', 'tem', 'ADMIN', 'MALE', 35, 99.9, 186, 'ONE', 1000, 30, 30),
+       ('Ivan', 'ivan@gmail.com', 'ivan', 'USER', 'MALE', 50, 99.9, 190, 'SEVEN', 10000, 20, 20);

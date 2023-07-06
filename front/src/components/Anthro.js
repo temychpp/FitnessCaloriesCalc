@@ -10,7 +10,7 @@ const emitLoadingError = (message) => {
 async function getAnthro(userId) {
     // todo move rest configs to separate file
     emitCustomEvent('start-loading');
-    return fetchWithTimeout('http://localhost:8080/pe111rson/anthro?id=' + userId,
+    return fetchWithTimeout('http://localhost:8080/person/anthro?id=' + userId,
         {
             method: 'GET',
             headers: {
@@ -21,7 +21,6 @@ async function getAnthro(userId) {
             emitCustomEvent('loaded');
         })
 }
-
 
 async function postAnthro(formData, id) {
     // todo move rest configs to separate file
@@ -50,7 +49,6 @@ export default function Anthro() {
     const [form] = Form.useForm()
 
     useEffect(() => {
-
         getAnthro(1).then(result => {
             form.setFieldValue('age', result.age)
             form.setFieldValue('gender', result.gender)
@@ -76,8 +74,8 @@ export default function Anthro() {
                 label="Пол"
             >
                 <Select placeholder="выберите ваш пол">
-                    <Select.Option value="male">мужской</Select.Option>
-                    <Select.Option value="female">женский</Select.Option>
+                    <Select.Option value="MALE">мужской</Select.Option>
+                    <Select.Option value="FEMALE">женский</Select.Option>
                 </Select>
             </Form.Item>
             <Form.Item
