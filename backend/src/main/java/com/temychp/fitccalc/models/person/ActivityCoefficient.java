@@ -1,8 +1,11 @@
 package com.temychp.fitccalc.models.person;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 public enum ActivityCoefficient {
 
     ONE(1.2),
@@ -34,9 +37,10 @@ public enum ActivityCoefficient {
 
     public static ActivityCoefficient valueOfFromDouble(Double coef) {
 
+        log.info("ActivityCoefficient valueOfFromDouble coef= {}", coef);
         ActivityCoefficient result = map.get(coef);
         if (result == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("null в ActivityCoefficient");
         }
         return result;
     }

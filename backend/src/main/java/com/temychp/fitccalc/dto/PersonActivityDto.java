@@ -10,6 +10,8 @@ import lombok.ToString;
 @ToString
 public final class PersonActivityDto {
 
+    private Long id;
+
     private Long stepsByDay;
 
     private Long fitnessByDay;

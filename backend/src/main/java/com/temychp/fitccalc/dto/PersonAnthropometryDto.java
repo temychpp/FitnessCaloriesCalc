@@ -10,6 +10,8 @@ import lombok.ToString;
 @ToString
 public final class PersonAnthropometryDto {
 
+    private Long id;
+
     private Gender gender;
 
     private Integer age;

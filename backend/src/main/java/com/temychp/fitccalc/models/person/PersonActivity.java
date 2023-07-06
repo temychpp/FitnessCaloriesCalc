@@ -1,7 +1,9 @@
 package com.temychp.fitccalc.models.person;
 
-import com.temychp.fitccalc.util.convertors.ActivityCoefficientConverter;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.*;
 
 @NoArgsConstructor
@@ -23,8 +25,8 @@ public final class PersonActivity {
     private Long aerobicsByDay;
 
 
-    @Convert(converter = ActivityCoefficientConverter.class)
-//    @Enumerated(EnumType.STRING)
+//    @Convert(converter = ActivityCoefficientConverter.class)
+    @Enumerated(EnumType.STRING)
     @Column(name = "activity_coefficient")
     private ActivityCoefficient activityCoefficient;
 

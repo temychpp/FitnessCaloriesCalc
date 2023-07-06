@@ -75,10 +75,10 @@ public class PersonController {
 
     @PostMapping("/anthro")
     public ResponseEntity<PersonAnthropometryDto> updateAnthro(
-            @RequestParam(value = "id") Long id,
             @RequestBody PersonAnthropometryDto personAnthropometryDto) {
         ResponseEntity<PersonAnthropometryDto> result;
         try {
+            Long id= personAnthropometryDto.getId();
             Person person = personService.findOne(id);
             person.setPersonAnthropometry(personAnthroConvertor.DtoToModel(personAnthropometryDto));
             personService.save(person);
@@ -99,10 +99,10 @@ public class PersonController {
 
     @PostMapping("/activity")
     public ResponseEntity<PersonActivityDto> updateActivity(
-            @RequestParam(value = "id") Long id,
             @RequestBody PersonActivityDto personActivityDto) {
         ResponseEntity<PersonActivityDto> result;
         try {
+            Long id= personActivityDto.getId();
             Person person = personService.findOne(id);
             person.setPersonActivity(personActivityConvertor.DtoToModel(personActivityDto));
             personService.save(person);
