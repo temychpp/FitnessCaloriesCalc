@@ -1,14 +1,25 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './css/App.css';
-import {Route, Routes} from "react-router-dom";
+import {Route, Routes, useNavigate} from "react-router-dom";
 import MainPage from "./components/MainPage";
 import Navigation from "./components/Navigation";
 import Anthro from "./components/Anthro";
 import Activity from "./components/Activity";
 import Calc from "./components/Calc";
 import Account from "./components/Account";
+import {useCustomEventListener} from "react-custom-events";
 
 function App() {
+    const [lastUpdate, setLastUpdate] = useState(Date.now())
+    const navigate = useNavigate();
+
+    useCustomEventListener('account-update', (data) => {
+        setLastUpdate(Date.now)
+        if (data === 'logout') {
+            navigate('/');
+        }
+    });
+
     return (
         <>
             <Navigation/>

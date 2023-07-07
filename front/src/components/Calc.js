@@ -2,17 +2,12 @@ import React, {useEffect} from 'react';
 import {Form, Input} from 'antd'
 import {emitCustomEvent} from "react-custom-events";
 import fetchWithTimeout from "../core/fetchWithTimeout";
+import {getAccount} from "../core/account";
+import {calcUrl, GET_REQUEST, getUrl} from "../core/urlResolver";
 
 const emitLoadingError = (message) => {
     emitCustomEvent('error-event', message);
 }
-
-const GET_OPTIONS = {
-    method: 'GET',
-    headers: {
-        'Content-Type': 'application/json'
-    }
-};
 
 let results = {
     bmi: '',
@@ -34,37 +29,39 @@ async function getAllCalculations(id) {
 
 
 async function getBmi(userId) {
-    return fetchWithTimeout('http://localhost:8080/calc/body_mass_index?id=' + userId, GET_OPTIONS)
+    return fetchWithTimeout(getUrl(calcUrl, '/body_mass_index?id=' + userId), GET_REQUEST)
         .then(data => data.json())
 }
 
 async function getCaloriesMSJ(id) {
-    return fetchWithTimeout('http://localhost:8080/calc/calories_mifflin_stjeor?id=' + id, GET_OPTIONS)
+    return fetchWithTimeout(getUrl(calcUrl, '/calories_mifflin_stjeor?id=' + id), GET_REQUEST)
         .then(data => data.json())
 }
 
 async function getIdealWeightLorenz(id) {
-    return fetchWithTimeout('http://localhost:8080/calc/ideal_weight_lorenz?id=' + id, GET_OPTIONS)
+    return fetchWithTimeout(getUrl(calcUrl,'/ideal_weight_lorenz?id=' + id), GET_REQUEST)
         .then(data => data.json())
 }
 
 async function getIdealWeightDevine(id) {
-    return fetchWithTimeout('http://localhost:8080/calc/ideal_weight_devine?id=' + id, GET_OPTIONS)
+    return fetchWithTimeout(getUrl(calcUrl, '/ideal_weight_devine?id=' + id), GET_REQUEST)
         .then(data => data.json())
 }
 
 async function getIdealWeightBroca(id) {
-    return fetchWithTimeout('http://localhost:8080/calc/ideal_weight_broca?id=' + id, GET_OPTIONS)
+    return fetchWithTimeout(getUrl(calcUrl, '/ideal_weight_broca?id=' + id), GET_REQUEST)
         .then(data => data.json())
 }
 
 export default function Calc() {
+    const account = getAccount();
 
     const [form] = Form.useForm()
 
     useEffect(() => {
+        if (account !== null) {
         emitCustomEvent('start-loading');
-        getAllCalculations(1).then(_ => {
+        getAllCalculations(account.id).then(_ => {
             form.setFieldValue('bodyMassIndex', results.bmi)
             form.setFieldValue('idealWeightBroca', results.msj)
             form.setFieldValue('idealWeightLorenz', results.lorenz)
@@ -74,12 +71,12 @@ export default function Calc() {
             .finally(_ => {
                 emitCustomEvent('loaded');
             })
-    }, []);
+    }}, []);
 
 
     return (<>
         <h1>Расчеты</h1>
-        <Form
+        {account !== null && <Form
             form={form}
             name="calc">
             <Form.Item
@@ -117,6 +114,6 @@ export default function Calc() {
                 <Input disabled={true}/>
             </Form.Item>
 
-        </Form>
+        </Form>}
     </>)
 }
