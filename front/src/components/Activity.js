@@ -4,22 +4,23 @@ import {emitCustomEvent} from "react-custom-events";
 import fetchWithTimeout from "../core/fetchWithTimeout";
 import {getAccount} from "../core/account";
 import {activityUrl, GET_REQUEST, getUrl, post_rq} from "../core/urlResolver";
+import {ERROR_EVENT, LOADED, START_LOADING} from "../core/loadEvents";
 
 const emitLoadingError = (message) => {
-    emitCustomEvent('error-event', message);
+    emitCustomEvent(ERROR_EVENT, message);
 }
 
 async function getActivity(userId) {
-    emitCustomEvent('start-loading');
+    emitCustomEvent(START_LOADING);
     return fetchWithTimeout(getUrl(activityUrl, '?id=' + userId), GET_REQUEST)
         .then(data => data.json())
         .finally(_ => {
-            emitCustomEvent('loaded');
+            emitCustomEvent(LOADED);
         })
 }
 
 async function postActivity(formData, id) {
-    emitCustomEvent('start-loading');
+    emitCustomEvent(START_LOADING);
     let body = JSON.stringify({
         id: id,
         stepsByDay: formData.stepsByDay,
@@ -31,7 +32,7 @@ async function postActivity(formData, id) {
         .then(data => data.json())
         .catch(_ => null)
         .finally(_ => {
-            emitCustomEvent('loaded');
+            emitCustomEvent(LOADED);
         })
 }
 

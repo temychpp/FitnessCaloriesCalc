@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Modal, Alert, Form, Input, Menu} from 'antd';
 import {emitCustomEvent} from 'react-custom-events'
 import {updateAccount} from "../core/account";
-import {emitLoadingError} from "../core/loadEvents";
+import {ACCOUNT_UPDATE, emitLoadingError} from "../core/loadEvents";
 import {Link} from "react-router-dom";
 import fetchWithTimeout from "../core/fetchWithTimeout";
 import {getUrl, loginUrl} from "../core/urlResolver";
@@ -42,7 +42,7 @@ export default function Login() {
                 });
                 setIsOpen(false)
                 setConfirmLoading(false);
-                emitCustomEvent('account-update');
+                emitCustomEvent(ACCOUNT_UPDATE);
             }
         }).catch(_ => {
             emitLoadingError("Ошибка логина")

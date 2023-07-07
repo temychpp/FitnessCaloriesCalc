@@ -3,13 +3,14 @@ import {Menu} from 'antd';
 import {Link} from "react-router-dom";
 import {getAccount, wipeAccount} from "../core/account";
 import {emitCustomEvent} from "react-custom-events";
+import {ACCOUNT_UPDATE} from "../core/loadEvents";
 
 export default function UserMenu() {
 
     const onClick = (key) => {
         if (key.key === "logout") {
             wipeAccount();
-            emitCustomEvent('account-update', 'logout');
+            emitCustomEvent(ACCOUNT_UPDATE, 'logout');
         }
     }
 

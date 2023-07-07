@@ -8,12 +8,13 @@ import Activity from "./components/Activity";
 import Calc from "./components/Calc";
 import Account from "./components/Account";
 import {useCustomEventListener} from "react-custom-events";
+import {ACCOUNT_UPDATE} from "./core/loadEvents";
 
 function App() {
     const [lastUpdate, setLastUpdate] = useState(Date.now())
     const navigate = useNavigate();
 
-    useCustomEventListener('account-update', (data) => {
+    useCustomEventListener(ACCOUNT_UPDATE, (data) => {
         setLastUpdate(Date.now)
         if (data === 'logout') {
             navigate('/');

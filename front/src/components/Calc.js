@@ -4,9 +4,10 @@ import {emitCustomEvent} from "react-custom-events";
 import fetchWithTimeout from "../core/fetchWithTimeout";
 import {getAccount} from "../core/account";
 import {calcUrl, GET_REQUEST, getUrl} from "../core/urlResolver";
+import {ERROR_EVENT, LOADED, START_LOADING} from "../core/loadEvents";
 
 const emitLoadingError = (message) => {
-    emitCustomEvent('error-event', message);
+    emitCustomEvent(ERROR_EVENT, message);
 }
 
 let results = {
@@ -60,7 +61,7 @@ export default function Calc() {
 
     useEffect(() => {
         if (account !== null) {
-        emitCustomEvent('start-loading');
+        emitCustomEvent(START_LOADING);
         getAllCalculations(account.id).then(_ => {
             form.setFieldValue('bodyMassIndex', results.bmi)
             form.setFieldValue('idealWeightBroca', results.msj)
@@ -69,7 +70,7 @@ export default function Calc() {
             form.setFieldValue('сaloriesMSJ', results.broca)
         }).catch(_ => emitLoadingError('Ошибка загрузки расчетов'))
             .finally(_ => {
-                emitCustomEvent('loaded');
+                emitCustomEvent(LOADED);
             })
     }}, []);
 

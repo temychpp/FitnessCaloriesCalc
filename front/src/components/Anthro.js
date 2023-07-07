@@ -3,15 +3,15 @@ import {Button, Form, Select, Input} from 'antd'
 import {emitCustomEvent} from "react-custom-events";
 import fetchWithTimeout from "../core/fetchWithTimeout";
 import {getAccount} from "../core/account";
-import {emitLoadingError} from "../core/loadEvents";
+import {emitLoadingError, LOADED, START_LOADING} from "../core/loadEvents";
 import {anthroUrl, GET_REQUEST, getUrl, post_rq} from "../core/urlResolver";
 
 async function getAnthro(userId) {
-    emitCustomEvent('start-loading');
+    emitCustomEvent(START_LOADING);
     return fetchWithTimeout(getUrl(anthroUrl, '?id=' + userId), GET_REQUEST)
         .then(data => data.json())
         .finally(_ => {
-            emitCustomEvent('loaded');
+            emitCustomEvent(LOADED);
         })
 }
 
@@ -23,11 +23,11 @@ async function postAnthro(formData, id) {
         weight: formData.weight,
         gender: formData.gender
     });
-    emitCustomEvent('start-loading');
+    emitCustomEvent(START_LOADING);
     return fetchWithTimeout(getUrl(anthroUrl), post_rq(body))
         .then(data => data.json())
         .finally(_ => {
-            emitCustomEvent('loaded');
+            emitCustomEvent(LOADED);
         })
 }
 
