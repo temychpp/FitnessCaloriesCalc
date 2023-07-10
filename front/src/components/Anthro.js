@@ -2,103 +2,93 @@ import React, {useEffect} from 'react';
 import {Button, Form, Select, Input} from 'antd'
 import {emitCustomEvent} from "react-custom-events";
 import fetchWithTimeout from "../core/fetchWithTimeout";
-
-const emitLoadingError = (message) => {
-    emitCustomEvent('error-event', message);
-}
+import {getAccount} from "../core/account";
+import {emitLoadingError, LOADED, START_LOADING} from "../core/loadEvents";
+import {anthroUrl, GET_REQUEST, getUrl, post_rq} from "../core/urlResolver";
 
 async function getAnthro(userId) {
-    // todo move rest configs to separate file
-    emitCustomEvent('start-loading');
-    return fetchWithTimeout('http://localhost:8080/person/anthro?id=' + userId,
-        {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(data => data.json())
+    emitCustomEvent(START_LOADING);
+    return fetchWithTimeout(getUrl(anthroUrl, '?id=' + userId), GET_REQUEST)
+        .then(data => data.json())
         .finally(_ => {
-            emitCustomEvent('loaded');
+            emitCustomEvent(LOADED);
         })
 }
 
-async function postAnthro(formData, id) {
-    // todo move rest configs to separate file
-    emitCustomEvent('start-loading');
-    return fetchWithTimeout('http://localhost:8080/person/anthro', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            id: id,
-            age: formData.age,
-            height: formData.height,
-            weight: formData.weight,
-            gender: formData.gender
-        })
-    })
+async function postAnthro(formData, userId) {
+    let body = JSON.stringify({
+        id: userId,
+        age: formData.age,
+        height: formData.height,
+        weight: formData.weight,
+        gender: formData.gender
+    });
+    emitCustomEvent(START_LOADING);
+    return fetchWithTimeout(getUrl(anthroUrl), post_rq(body))
         .then(data => data.json())
         .finally(_ => {
-            emitCustomEvent('loaded');
+            emitCustomEvent(LOADED);
         })
 }
 
 export default function Anthro() {
-
+    const account = getAccount();
     const [form] = Form.useForm()
 
     useEffect(() => {
-        getAnthro(1).then(result => {
-            form.setFieldValue('age', result.age)
-            form.setFieldValue('gender', result.gender)
-            form.setFieldValue('height', result.height)
-            form.setFieldValue('weight', result.weight)
-        }).catch(_ => emitLoadingError('Ошибка загрузки антропометрии'))
+        if (account !== null) {
+            getAnthro(account.id).then(result => {
+                form.setFieldValue('age', result.age)
+                form.setFieldValue('gender', result.gender)
+                form.setFieldValue('height', result.height)
+                form.setFieldValue('weight', result.weight)
+            }).catch(_ => emitLoadingError('Ошибка загрузки антропометрии'))
+        }
     }, []);
 
     const onFinish = (values) => {
-        postAnthro(values, 1)
+        postAnthro(values, account.id)
             .catch(_ => emitLoadingError('Ошибка сохранения антропометрии'))
     }
 
     return (<>
         <h1>Антропометрия</h1>
-        <Form
-            form={form}
-            name="anthro"
-            onFinish={onFinish}
-        >
-            <Form.Item
-                name="gender"
-                label="Пол"
+        {account !== null &&
+            <Form
+                form={form}
+                name="anthro"
+                onFinish={onFinish}
             >
-                <Select placeholder="выберите ваш пол">
-                    <Select.Option value="MALE">мужской</Select.Option>
-                    <Select.Option value="FEMALE">женский</Select.Option>
-                </Select>
-            </Form.Item>
-            <Form.Item
-                name="age"
-                label="Возраст"
-            >
-                <Input/>
-            </Form.Item>
-            <Form.Item
-                name="height"
-                label="Рост"
-            >
-                <Input/>
-            </Form.Item>
-            <Form.Item
-                name="weight"
-                label="Вес"
-            >
-                <Input/>
-            </Form.Item>
-            <Button type="primary" htmlType="submit">
-                Сохранить
-            </Button>
-        </Form>
+                <Form.Item
+                    name="gender"
+                    label="Пол"
+                >
+                    <Select placeholder="выберите ваш пол">
+                        <Select.Option value="MALE">мужской</Select.Option>
+                        <Select.Option value="FEMALE">женский</Select.Option>
+                    </Select>
+                </Form.Item>
+                <Form.Item
+                    name="age"
+                    label="Возраст"
+                >
+                    <Input/>
+                </Form.Item>
+                <Form.Item
+                    name="height"
+                    label="Рост"
+                >
+                    <Input/>
+                </Form.Item>
+                <Form.Item
+                    name="weight"
+                    label="Вес"
+                >
+                    <Input/>
+                </Form.Item>
+                <Button type="primary" htmlType="submit">
+                    Сохранить
+                </Button>
+            </Form>}
     </>)
 }

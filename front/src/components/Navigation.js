@@ -4,20 +4,21 @@ import {Link} from "react-router-dom";
 import Loader from "./Loader";
 import { message } from 'antd';
 import { useCustomEventListener } from 'react-custom-events'
+import {ERROR_EVENT, INFO_EVENT, WARN_EVENT} from "../core/loadEvents";
 
 export default function Navigation() {
     const [messageApi, contextHolder] = message.useMessage();
 
-    useCustomEventListener('error-event', (data) => {
+    useCustomEventListener(ERROR_EVENT, (data) => {
         console.log(data)
         messageApi.error(data);
     })
 
-    useCustomEventListener('warn-event', (data) => {
+    useCustomEventListener(WARN_EVENT, (data) => {
         messageApi.warning(data);
     })
 
-    useCustomEventListener('info-event', (data) => {
+    useCustomEventListener(INFO_EVENT, (data) => {
         messageApi.info(data);
     })
 

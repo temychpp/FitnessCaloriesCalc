@@ -1,8 +1,18 @@
 import React from 'react';
 import {Menu} from 'antd';
 import {Link} from "react-router-dom";
+import {getAccount, wipeAccount} from "../core/account";
+import {emitCustomEvent} from "react-custom-events";
+import {ACCOUNT_UPDATE} from "../core/loadEvents";
 
 export default function UserMenu() {
+
+    const onClick = (key) => {
+        if (key.key === "logout") {
+            wipeAccount();
+            emitCustomEvent(ACCOUNT_UPDATE, 'logout');
+        }
+    }
 
     const items = [
         {
@@ -18,7 +28,7 @@ export default function UserMenu() {
             key: 'calc'
         },
         {
-            label: (<Link to='/account'>Аккаунт</Link>),
+            label: (<Link to='/account'>{getAccount().name}</Link>),
             key: 'account',
             children: [
                 {
@@ -33,6 +43,7 @@ export default function UserMenu() {
             <Menu
                 mode="horizontal"
                 items={items}
+                onClick={onClick}
             />
         </>
     )

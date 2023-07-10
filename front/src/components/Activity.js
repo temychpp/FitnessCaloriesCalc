@@ -2,71 +2,63 @@ import React, {useEffect} from 'react';
 import {Button, Form, Select, Input} from 'antd'
 import {emitCustomEvent} from "react-custom-events";
 import fetchWithTimeout from "../core/fetchWithTimeout";
+import {getAccount} from "../core/account";
+import {activityUrl, GET_REQUEST, getUrl, post_rq} from "../core/urlResolver";
+import {ERROR_EVENT, LOADED, START_LOADING} from "../core/loadEvents";
 
 const emitLoadingError = (message) => {
-    emitCustomEvent('error-event', message);
+    emitCustomEvent(ERROR_EVENT, message);
 }
 
 async function getActivity(userId) {
-    // todo move rest configs to separate file
-    emitCustomEvent('start-loading');
-    return fetchWithTimeout('http://localhost:8080/person/activity?id=' + userId,
-        {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(data => data.json())
+    emitCustomEvent(START_LOADING);
+    return fetchWithTimeout(getUrl(activityUrl, '?id=' + userId), GET_REQUEST)
+        .then(data => data.json())
         .finally(_ => {
-            emitCustomEvent('loaded');
+            emitCustomEvent(LOADED);
         })
 }
 
-async function postActivity(formData, id) {
-    // todo move rest configs to separate file
-    emitCustomEvent('start-loading');
-    return fetchWithTimeout('http://localhost:8080/person/activity', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            id: id,
-            stepsByDay: formData.stepsByDay,
-            fitnessByDay: formData.fitnessByDay,
-            aerobicsByDay: formData.aerobicsByDay,
-            activityCoefficient: formData.activityCoefficient,
-        })
-    })
+async function postActivity(formData, userId) {
+    emitCustomEvent(START_LOADING);
+    let body = JSON.stringify({
+        id: userId,
+        stepsByDay: formData.stepsByDay,
+        fitnessByDay: formData.fitnessByDay,
+        aerobicsByDay: formData.aerobicsByDay,
+        activityCoefficient: formData.activityCoefficient,
+    });
+    return fetchWithTimeout(getUrl(activityUrl), post_rq(body))
         .then(data => data.json())
         .catch(_ => null)
-        .finally(data => {
-            emitCustomEvent('loaded');
+        .finally(_ => {
+            emitCustomEvent(LOADED);
         })
-    // todo catch and show exceptions
 }
 
 export default function Activity() {
-
+    const account = getAccount();
     const [form] = Form.useForm()
 
     useEffect(() => {
-        getActivity(1).then(result => {
-            form.setFieldValue('stepsByDay', result.stepsByDay)
-            form.setFieldValue('fitnessByDay', result.fitnessByDay)
-            form.setFieldValue('aerobicsByDay', result.aerobicsByDay)
-            form.setFieldValue('activityCoefficient', result.activityCoefficient)
-        }).catch(_ => emitLoadingError('Ошибка загрузки активности'))
+        if (account !== null) {
+            getActivity(account.id).then(result => {
+                form.setFieldValue('stepsByDay', result.stepsByDay)
+                form.setFieldValue('fitnessByDay', result.fitnessByDay)
+                form.setFieldValue('aerobicsByDay', result.aerobicsByDay)
+                form.setFieldValue('activityCoefficient', result.activityCoefficient)
+            }).catch(_ => emitLoadingError('Ошибка загрузки активности'))
+        }
     }, []);
 
     const onFinish = (values) => {
-        postActivity(values, 1)
+        postActivity(values, account.id)
             .catch(_ => emitLoadingError('Ошибка сохранения активности'))
     }
 
     return (<>
         <h1>Активность</h1>
-        <Form
+        {account !== null && <Form
             form={form}
             name="activity"
             onFinish={onFinish}>
@@ -110,6 +102,6 @@ export default function Activity() {
             <Button type="primary" htmlType="submit">
                 Сохранить
             </Button>
-        </Form>
+        </Form>}
     </>)
 }

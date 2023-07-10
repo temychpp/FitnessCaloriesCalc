@@ -21,6 +21,14 @@ app.use('/500/person/anthro', (req, res) => {
     res.status(500).send()
 })
 
+
+app.use('/login', (req, res) => {
+    res.send({
+        token: 'test123',
+        id: 1
+    })
+})
+
 // ======= CALC ========
 app.use('/calc/body_mass_index', (req, res) => {
     res.send("1")
