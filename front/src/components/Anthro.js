@@ -15,9 +15,9 @@ async function getAnthro(userId) {
         })
 }
 
-async function postAnthro(formData, id) {
+async function postAnthro(formData, userId) {
     let body = JSON.stringify({
-        id: id,
+        id: userId,
         age: formData.age,
         height: formData.height,
         weight: formData.weight,

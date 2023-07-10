@@ -19,10 +19,10 @@ async function getActivity(userId) {
         })
 }
 
-async function postActivity(formData, id) {
+async function postActivity(formData, userId) {
     emitCustomEvent(START_LOADING);
     let body = JSON.stringify({
-        id: id,
+        id: userId,
         stepsByDay: formData.stepsByDay,
         fitnessByDay: formData.fitnessByDay,
         aerobicsByDay: formData.aerobicsByDay,

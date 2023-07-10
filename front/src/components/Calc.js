@@ -18,13 +18,13 @@ let results = {
     broca: ''
 }
 
-async function getAllCalculations(id) {
+async function getAllCalculations(userId) {
     await Promise.all([
-        getBmi(id).then(data => results.bmi = data),
-        getCaloriesMSJ(id).then(data => results.msj = data),
-        getIdealWeightLorenz(id).then(data => results.lorenz = data),
-        getIdealWeightDevine(id).then(data => results.devine = data),
-        getIdealWeightBroca(id).then(data => results.broca = data)
+        getBmi(userId).then(data => results.bmi = data),
+        getCaloriesMSJ(userId).then(data => results.msj = data),
+        getIdealWeightLorenz(userId).then(data => results.lorenz = data),
+        getIdealWeightDevine(userId).then(data => results.devine = data),
+        getIdealWeightBroca(userId).then(data => results.broca = data)
     ])
 }
 
@@ -34,23 +34,23 @@ async function getBmi(userId) {
         .then(data => data.json())
 }
 
-async function getCaloriesMSJ(id) {
-    return fetchWithTimeout(getUrl(calcUrl, '/calories_mifflin_stjeor?id=' + id), GET_REQUEST)
+async function getCaloriesMSJ(userId) {
+    return fetchWithTimeout(getUrl(calcUrl, '/calories_mifflin_stjeor?id=' + userId), GET_REQUEST)
         .then(data => data.json())
 }
 
-async function getIdealWeightLorenz(id) {
-    return fetchWithTimeout(getUrl(calcUrl,'/ideal_weight_lorenz?id=' + id), GET_REQUEST)
+async function getIdealWeightLorenz(userId) {
+    return fetchWithTimeout(getUrl(calcUrl,'/ideal_weight_lorenz?id=' + userId), GET_REQUEST)
         .then(data => data.json())
 }
 
-async function getIdealWeightDevine(id) {
-    return fetchWithTimeout(getUrl(calcUrl, '/ideal_weight_devine?id=' + id), GET_REQUEST)
+async function getIdealWeightDevine(userId) {
+    return fetchWithTimeout(getUrl(calcUrl, '/ideal_weight_devine?id=' + userId), GET_REQUEST)
         .then(data => data.json())
 }
 
-async function getIdealWeightBroca(id) {
-    return fetchWithTimeout(getUrl(calcUrl, '/ideal_weight_broca?id=' + id), GET_REQUEST)
+async function getIdealWeightBroca(userId) {
+    return fetchWithTimeout(getUrl(calcUrl, '/ideal_weight_broca?id=' + userId), GET_REQUEST)
         .then(data => data.json())
 }
 
@@ -64,10 +64,10 @@ export default function Calc() {
         emitCustomEvent(START_LOADING);
         getAllCalculations(account.id).then(_ => {
             form.setFieldValue('bodyMassIndex', results.bmi)
-            form.setFieldValue('idealWeightBroca', results.msj)
+            form.setFieldValue('idealWeightBroca', results.broca)
             form.setFieldValue('idealWeightLorenz', results.lorenz)
             form.setFieldValue('idealWeightDevine', results.devine)
-            form.setFieldValue('сaloriesMSJ', results.broca)
+            form.setFieldValue('сaloriesMSJ', results.msj)
         }).catch(_ => emitLoadingError('Ошибка загрузки расчетов'))
             .finally(_ => {
                 emitCustomEvent(LOADED);
