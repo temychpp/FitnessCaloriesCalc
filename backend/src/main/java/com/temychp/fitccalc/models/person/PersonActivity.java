@@ -24,8 +24,6 @@ public final class PersonActivity {
     @Column(name = "aerobics_by_day")
     private Long aerobicsByDay;
 
-
-//    @Convert(converter = ActivityCoefficientConverter.class)
     @Enumerated(EnumType.STRING)
     @Column(name = "activity_coefficient")
     private ActivityCoefficient activityCoefficient;

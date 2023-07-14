@@ -1,4 +1,4 @@
-package com.temychp.fitccalc.security;
+package com.temychp.fitccalc.controllers;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,18 +10,23 @@ import org.springframework.web.bind.annotation.RestController;
 public class ResourceController {
 
     @GetMapping("")
-    public String getAuth() {
+    public String get() {
         return "Hello";
     }
 
+    @GetMapping("/home")
+    public String getHome() {
+        return "Home Page!";
+    }
+
     @GetMapping("/login")
-    public String loginEndpoint() {
+    public String loginGetEndpoint() {
         return "Login!";
     }
 
-    @GetMapping("/admin")
+    @GetMapping("/admin/hello")
     public String adminEndpoint() {
-        return "Admin!";
+        return "Hello Admin!";
     }
 
     @GetMapping("/user")

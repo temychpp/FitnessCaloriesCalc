@@ -1,10 +1,21 @@
 package com.temychp.fitccalc.services;
 
+import com.temychp.fitccalc.dto.LoginDto;
+import com.temychp.fitccalc.dto.PersonDto;
+import com.temychp.fitccalc.dto.RegistrationDto;
 import com.temychp.fitccalc.models.person.Gender;
 import com.temychp.fitccalc.models.person.Person;
+import com.temychp.fitccalc.models.person.Role;
 import com.temychp.fitccalc.repositories.PersonRepository;
+import com.temychp.fitccalc.util.convertors.PersonConvertor;
+import com.temychp.fitccalc.util.convertors.RegistrationConvertor;
+import com.temychp.fitccalc.util.exceptions.AppException;
+import com.temychp.fitccalc.util.exceptions.PersonDuplicateException;
+import com.temychp.fitccalc.util.exceptions.PersonNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +29,13 @@ import java.util.Optional;
 @Service
 public class PersonService {
 
+    private final PersonConvertor personConvertor;
+
+    private final RegistrationConvertor registrationConvertor;
+
     private final PersonRepository personRepository;
+
+    private PasswordEncoder passwordEncoder;
 
     public List<Person> findAll() {
         return personRepository.findAll();
@@ -40,6 +57,8 @@ public class PersonService {
             person.setCreatedAt(Instant.now());
         }
         person.setChangedAt(Instant.now());
+        person.setRole(Role.valueOf("USER"));
+        person.setPassword(passwordEncoder.encode(person.getPassword()));
     }
 
     @Transactional
@@ -56,7 +75,6 @@ public class PersonService {
     public Optional<Person> findByName(String name) {
         return personRepository.findByName(name);
     }
-
 
     public double getBodyMassIndex(Long id) {
         Person person = findOne(id);
@@ -158,7 +176,61 @@ public class PersonService {
         } else if (person.getPersonAnthropometry().getAge() > 50) {
             result *= 1.06;
         }
+
         return result;
+
     }
 
+    public PersonDto login(LoginDto loginDto) {
+        log.info("credentialsDto ={}", loginDto);
+
+        Person person = personRepository.findByName(loginDto.getUsername())
+                .orElseThrow(PersonNotFoundException::new);
+
+        log.info("person ={}", person);
+
+        if (passwordEncoder.matches(loginDto.getPassword(), person.getPassword())) {
+
+            log.info(String.valueOf(passwordEncoder.matches(loginDto.getPassword(), person.getPassword())));
+
+            return personConvertor.ModelToDto(person);
+        }
+        throw new AppException("Invalid password", HttpStatus.BAD_REQUEST);
+    }
+
+    @Transactional
+    public PersonDto register(RegistrationDto registrationDto) {
+        Optional<Person> optionalPerson = personRepository.findByName(registrationDto.getName());
+        if (optionalPerson.isPresent()) {
+            throw new PersonDuplicateException("Person already exists");
+        }
+
+        Person person = registrationConvertor.DtoToModel(registrationDto);
+
+        person.setPassword(passwordEncoder.encode(registrationDto.getPassword()));
+
+        Person savedPerson = personRepository.save(person);
+
+        log.info("Зарегистрирован новый пользователь {}", person);
+
+        return personConvertor.ModelToDto(savedPerson);
+    }
+
+//
+//    @Transactional
+//    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+//       Optional <Person> person= personRepository.findByName(userName);
+//        if (person.isEmpty()){
+//            throw new UsernameNotFoundException("Unknown user: "+userName);
+//        }
+//        UserDetails user = User.builder()
+//                .username(person.get().getName())
+//                .password(person.get().getPassword())
+//                .roles(person.get().getRole().getPersonRole())
+//                .build();
+//        return user;
+//    }
+
 }
+
+

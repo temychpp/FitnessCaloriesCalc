@@ -4,7 +4,7 @@ CREATE TABLE person
     name                 VARCHAR(255) NOT NULL,
     email                VARCHAR(255) NOT NULL,
     password             VARCHAR(255),
-    role                 CHAR(10) DEFAULT 'user',
+    role                 CHAR(10) DEFAULT 'USER',
     created_at           TIMESTAMPTZ,
     changed_at           TIMESTAMPTZ,
     gender               CHAR(10),
@@ -19,5 +19,5 @@ CREATE TABLE person
 
 INSERT INTO person(name, email, password, role, gender, age, weight, height,
                    activity_coefficient, steps_by_day, fitness_by_day, aerobics_by_day)
-VALUES ('Tem', 'tem@mail.ru', 'tem', 'ADMIN', 'MALE', 35, 99.9, 186, 'ONE', 1000, 30, 30),
-       ('Ivan', 'ivan@gmail.com', 'ivan', 'USER', 'MALE', 50, 99.9, 190, 'SEVEN', 10000, 20, 20);
+VALUES ('Tem', 'tem@mail.ru', '$2a$10$JGdEPMRbBu6rJ8gwVS3LS.K.ussa54S7cqOm8xfIsc7BVTk0C4dqG', 'ADMIN', 'MALE', 35, 99.9, 186, 'ONE', 1000, 30, 30),
+       ('Ivan', 'ivan@gmail.com', '$2a$10$Ou30Zov2F9ct2qv0mUSA1uv1poZ6110yiPYln53HDdwTXpQU6dxvu', 'USER', 'MALE', 50, 99.9, 190, 'SEVEN', 10000, 20, 20);
