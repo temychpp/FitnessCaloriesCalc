@@ -24,35 +24,11 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers(HttpMethod.POST, "/", "/login", "/register")
-                        .permitAll().anyRequest().authenticated())
-                .addFilterBefore(new JwtAuthFilter(personAuthenticationProvider), UsernamePasswordAuthenticationFilter.class)
-                .sessionManagement(customizer -> customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .exceptionHandling(customizer -> customizer.authenticationEntryPoint(personAuthenticationEntryPoint));
-        return http.build();
-    }
-
-    @Bean
-    public SecurityFilterChain securityFilterChain2(HttpSecurity http) throws Exception {
-        http
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/person/**")
-                        .hasAnyRole("USER", "ADMIN")
-                        .anyRequest().authenticated())
-                .addFilterBefore(new JwtAuthFilter(personAuthenticationProvider), UsernamePasswordAuthenticationFilter.class)
-                .sessionManagement(customizer -> customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .exceptionHandling(customizer -> customizer.authenticationEntryPoint(personAuthenticationEntryPoint));
-        return http.build();
-    }
-
-    @Bean
-    public SecurityFilterChain securityFilterChain3(HttpSecurity http) throws Exception {
-        http
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests((requests) -> requests
+                        .requestMatchers(HttpMethod.POST, "/", "/login", "/register").permitAll()
+                        .requestMatchers("/person/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .anyRequest().authenticated())
+                        .anyRequest().authenticated()
+                )
                 .addFilterBefore(new JwtAuthFilter(personAuthenticationProvider), UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(customizer -> customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(customizer -> customizer.authenticationEntryPoint(personAuthenticationEntryPoint));

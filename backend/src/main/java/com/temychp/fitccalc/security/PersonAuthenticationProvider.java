@@ -69,7 +69,7 @@ public class PersonAuthenticationProvider {
                 .role(Role.valueOf((decoded.getClaim("role").asString())))
                 .build();
 
-        return new UsernamePasswordAuthenticationToken(personDto, null, Collections.singleton(new SimpleGrantedAuthority(personDto.getRole().getPersonRole())));
+        return new UsernamePasswordAuthenticationToken(personDto, null, Collections.singleton(new SimpleGrantedAuthority("ROLE_" + personDto.getRole().getPersonRole())));
     }
 
     public Authentication validateTokenStrongly(String token) {
@@ -81,7 +81,7 @@ public class PersonAuthenticationProvider {
 
         Optional<Person> person = personService.findByName(decoded.getIssuer());
 
-        return new UsernamePasswordAuthenticationToken(person, null, Collections.singleton(new SimpleGrantedAuthority(person.get().getRole().getPersonRole())));
+        return new UsernamePasswordAuthenticationToken(person, null, Collections.singleton(new SimpleGrantedAuthority("ROLE_" + person.get().getRole().getPersonRole())));
     }
 
 }
