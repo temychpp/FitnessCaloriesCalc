@@ -20,11 +20,11 @@ public class SecurityConfig {
     private final PersonAuthenticationProvider personAuthenticationProvider;
 
     @Bean
-    public SecurityFilterChain securityFilterChain1(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers(HttpMethod.POST, "/", "/login", "/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/", "/login", "/register").hasAnyAuthority("ROLE_USER","ROLE_ADMIN","ROLE_ANONYMOUS")
                         .requestMatchers("/person/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()

@@ -1,6 +1,6 @@
 package com.temychp.fitccalc.util.validators;
 
-import com.temychp.fitccalc.dto.PersonDto;
+import com.temychp.fitccalc.dto.RegistrationDto;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
@@ -13,7 +13,7 @@ public class PasswordMatchesValidator
 
     @Override
     public boolean isValid(Object obj, ConstraintValidatorContext context) {
-        PersonDto person = (PersonDto) obj;
-        return person.getPassword().equals(person.getMatchingPassword());
+        RegistrationDto person = (RegistrationDto) obj;
+        return person.getPassword().equals(person.getConfirmPassword());
     }
 }

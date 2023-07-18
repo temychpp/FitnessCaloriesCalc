@@ -61,16 +61,16 @@ export default function Login() {
     const items = [
         {
             label: (<Link to="/register">Зарегистрироваться</Link>),
-            key: 'login'
+            key: 'register'
         },
         {
             label: (<Link to='#'>Войти</Link>),
-            key: 'register'
+            key: 'login'
         },
     ];
 
     const onClick = (key) => {
-        if (key.key === "register") {
+        if (key.key === "login") {
             showModal();
         }
     }

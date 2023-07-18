@@ -181,7 +181,7 @@ public class PersonService {
 
     }
 
-    public PersonDto login(LoginDto loginDto) {
+    public PersonDto login(LoginDto loginDto) throws PersonNotFoundException, AppException {
         log.info("credentialsDto ={}", loginDto);
 
         Person person = personRepository.findByName(loginDto.getUsername())
@@ -190,47 +190,26 @@ public class PersonService {
         log.info("person ={}", person);
 
         if (passwordEncoder.matches(loginDto.getPassword(), person.getPassword())) {
-
-            log.info(String.valueOf(passwordEncoder.matches(loginDto.getPassword(), person.getPassword())));
-
             return personConvertor.ModelToDto(person);
         }
         throw new AppException("Invalid password", HttpStatus.BAD_REQUEST);
     }
 
     @Transactional
-    public PersonDto register(RegistrationDto registrationDto) {
-        Optional<Person> optionalPerson = personRepository.findByName(registrationDto.getName());
+    public PersonDto register(RegistrationDto registrationDto) throws PersonDuplicateException {
+        Optional<Person> optionalPerson = personRepository.findByNameOrEmail(registrationDto.getName(),registrationDto.getEmail());
+
         if (optionalPerson.isPresent()) {
             throw new PersonDuplicateException("Person already exists");
         }
 
         Person person = registrationConvertor.DtoToModel(registrationDto);
 
-        person.setPassword(passwordEncoder.encode(registrationDto.getPassword()));
-
-        Person savedPerson = personRepository.save(person);
+        save(person);
 
         log.info("Зарегистрирован новый пользователь {}", person);
 
-        return personConvertor.ModelToDto(savedPerson);
+        return personConvertor.ModelToDto(person);
     }
 
-//
-//    @Transactional
-//    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-//       Optional <Person> person= personRepository.findByName(userName);
-//        if (person.isEmpty()){
-//            throw new UsernameNotFoundException("Unknown user: "+userName);
-//        }
-//        UserDetails user = User.builder()
-//                .username(person.get().getName())
-//                .password(person.get().getPassword())
-//                .roles(person.get().getRole().getPersonRole())
-//                .build();
-//        return user;
-//    }
-
 }
-
-
