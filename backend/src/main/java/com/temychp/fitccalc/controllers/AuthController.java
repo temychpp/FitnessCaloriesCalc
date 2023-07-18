@@ -5,6 +5,7 @@ import com.temychp.fitccalc.dto.PersonDto;
 import com.temychp.fitccalc.dto.RegistrationDto;
 import com.temychp.fitccalc.security.PersonAuthenticationProvider;
 import com.temychp.fitccalc.services.PersonService;
+import com.temychp.fitccalc.util.exceptions.PersonDuplicateException;
 import com.temychp.fitccalc.util.exceptions.PersonNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -28,10 +29,8 @@ public class AuthController {
         ResponseEntity<PersonDto> result;
         try {
             PersonDto personDto = personService.login(loginDto);
-            log.info("loginDto={} personDto={}",loginDto,personDto);
             personDto.setToken(personAuthenticationProvider.createToken(personDto));
-            log.info("Token={}", personDto.getToken());
-            result = ResponseEntity.status(HttpStatus.OK).build();
+            result = ResponseEntity.status(HttpStatus.OK).body(personDto);
         } catch (PersonNotFoundException e) {
             result = ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             log.info("Ошибка в запросе!{}", e.getMessage());
@@ -43,16 +42,16 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<PersonDto> register(@RequestBody @Valid RegistrationDto person) {
-        ResponseEntity<PersonDto> result;
+    public ResponseEntity<?> register(@RequestBody @Valid RegistrationDto person) {
+        ResponseEntity<?> result;
         try {
             PersonDto createdPerson = personService.register(person);
             createdPerson.setToken(personAuthenticationProvider.createToken(createdPerson));
-            result = ResponseEntity.status(HttpStatus.OK).build();
+            result = ResponseEntity.status(HttpStatus.OK).body(createdPerson);
             log.info("Пользователь сохранен в базу: {}", person);
-//        } catch (PersonDuplicateException e) {
-//            result = ResponseEntity.status(HttpStatus.CONFLICT).body(person);
-//            log.info("Пользователь уже есть в базе {}", e.getMessage());
+        } catch (PersonDuplicateException e) {
+            result = ResponseEntity.status(HttpStatus.CONFLICT).body(person);
+            log.info("Пользователь уже есть в базе {}", e.getMessage());
         } catch (PersonNotFoundException e) {
             result = ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             log.info("Ошибка в запросе!{}", e.getMessage());

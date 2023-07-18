@@ -1,6 +1,5 @@
 package com.temychp.fitccalc.services;
 
-import com.temychp.fitccalc.dao.ProductDAO;
 import com.temychp.fitccalc.models.product.Product;
 import com.temychp.fitccalc.repositories.ProductRepository;
 import lombok.AllArgsConstructor;
@@ -18,8 +17,6 @@ import java.util.Optional;
 public class ProductService {
 
     private final ProductRepository productRepository;
-
-    private final ProductDAO productDAO;
 
     public List<Product> findAll() {
         return productRepository.findAll();
@@ -53,14 +50,5 @@ public class ProductService {
     public List<Product> showProductsStartingWith(String startString) {
         return productRepository.findByNameStartingWithIgnoreCase(startString);
     }
-
-    public List<Product> showProductsCreatedByPersonIdOrderByName(Long id) {
-        return productDAO.showProductsCreatedByPersonOrderByName(id);
-    }
-
-    public List<Product> showProductsOrderByMinCalories(int count) {
-        return productDAO.showProductsOrderByMinCalories(count);
-    }
-
 
 }

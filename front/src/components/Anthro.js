@@ -4,11 +4,11 @@ import {emitCustomEvent} from "react-custom-events";
 import fetchWithTimeout from "../core/fetchWithTimeout";
 import {getAccount} from "../core/account";
 import {emitLoadingError, LOADED, START_LOADING} from "../core/loadEvents";
-import {anthroUrl, GET_REQUEST, getUrl, post_rq} from "../core/urlResolver";
+import {anthroUrl, get_rq, getUrl, post_rq} from "../core/urlResolver";
 
 async function getAnthro(userId) {
     emitCustomEvent(START_LOADING);
-    return fetchWithTimeout(getUrl(anthroUrl, '?id=' + userId), GET_REQUEST)
+    return fetchWithTimeout(getUrl(anthroUrl, '?id=' + userId), get_rq())
         .then(data => data.json())
         .finally(_ => {
             emitCustomEvent(LOADED);
