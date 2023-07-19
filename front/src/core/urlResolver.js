@@ -7,10 +7,9 @@ export const activityUrl = 'person/activity';
 export const calcUrl = 'calc';
 export const loginUrl = 'login';
 export const registerUrl = 'register';
-export const adminRegisterUrl = 'admin/register';
 export const updatePersonUrl = 'update';
 export const createProductUrl = 'product';
-export const productByNameUrl = 'product';
+export const dayMealUrl = 'meal/mealbyday';
 
 export function get_rq() {
     let auth = ''

@@ -10,7 +10,6 @@ import com.temychp.fitccalc.models.person.Role;
 import com.temychp.fitccalc.repositories.PersonRepository;
 import com.temychp.fitccalc.util.convertors.PersonConvertor;
 import com.temychp.fitccalc.util.convertors.RegistrationConvertor;
-import com.temychp.fitccalc.util.convertors.UpdatePersonConvertor;
 import com.temychp.fitccalc.util.exceptions.AppException;
 import com.temychp.fitccalc.util.exceptions.PersonDuplicateException;
 import com.temychp.fitccalc.util.exceptions.PersonNotFoundException;
@@ -34,8 +33,6 @@ public class PersonService {
     private final PersonConvertor personConvertor;
 
     private final RegistrationConvertor registrationConvertor;
-
-    private final UpdatePersonConvertor updatePersonConvertor;
 
     private final PersonRepository personRepository;
 

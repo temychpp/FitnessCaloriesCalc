@@ -24,6 +24,11 @@ export default function UserMenu() {
 
     const items = [
         {
+            label:(<Link to='/home'>Еда</Link>),
+            key: 'dayMeal',
+        },
+
+        {
             label: (<Link to='/calc'>Расчеты</Link>),
             key: 'calc'
         },

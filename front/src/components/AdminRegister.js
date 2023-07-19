@@ -3,7 +3,7 @@ import {Button, Form, Select, Input} from 'antd'
 import {emitCustomEvent} from "react-custom-events";
 import fetchWithTimeout from "../core/fetchWithTimeout";
 import {emitLoadingError, LOADED, START_LOADING} from "../core/loadEvents";
-import {adminRegisterUrl, getUrl, post_rq} from "../core/urlResolver";
+import {registerUrl, getUrl, post_rq} from "../core/urlResolver";
 
 
 async function postRegister(formData) {
@@ -15,7 +15,7 @@ async function postRegister(formData) {
         confirmPassword: formData.confirmPassword
     });
     emitCustomEvent(START_LOADING);
-    return fetchWithTimeout(getUrl(adminRegisterUrl), post_rq(body))
+    return fetchWithTimeout(getUrl(registerUrl), post_rq(body))
         .then(data => data.json())
         .finally(_ => {
             emitCustomEvent(LOADED);
