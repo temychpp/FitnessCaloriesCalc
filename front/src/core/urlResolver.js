@@ -7,6 +7,10 @@ export const activityUrl = 'person/activity';
 export const calcUrl = 'calc';
 export const loginUrl = 'login';
 export const registerUrl = 'register';
+export const adminRegisterUrl = 'admin/register';
+export const updatePersonUrl = 'update';
+export const createProductUrl = 'product';
+export const productByNameUrl = 'product';
 
 export function get_rq() {
     let auth = ''
@@ -36,6 +40,21 @@ export function post_rq(body) {
         body: body
     }
 }
+
+export function patch_rq(body) {
+    let auth = ''
+    if (getAccount() !== null) auth = 'Bearer ' + getAccount().token
+
+    return {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': auth
+        },
+        body: body
+    }
+}
+
 
 export function getUrl(endpoint, params = '') {
     return url + endpoint + params;

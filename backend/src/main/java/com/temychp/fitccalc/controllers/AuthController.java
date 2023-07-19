@@ -3,6 +3,7 @@ package com.temychp.fitccalc.controllers;
 import com.temychp.fitccalc.dto.LoginDto;
 import com.temychp.fitccalc.dto.PersonDto;
 import com.temychp.fitccalc.dto.RegistrationDto;
+import com.temychp.fitccalc.dto.UpdatePersonDto;
 import com.temychp.fitccalc.security.PersonAuthenticationProvider;
 import com.temychp.fitccalc.services.PersonService;
 import com.temychp.fitccalc.util.exceptions.PersonDuplicateException;
@@ -12,9 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -60,6 +59,16 @@ public class AuthController {
             log.error("Ошибка сервера! {}", e.getMessage());
         }
         return result;
+    }
+
+    @PatchMapping("/update")
+    public ResponseEntity<HttpStatus> update(@RequestBody @Valid UpdatePersonDto updatePersonDto) {
+        log.info("updatePersonDto={}", updatePersonDto);
+        Long id = updatePersonDto.getId();
+
+        personService.update(updatePersonDto);
+        log.info("Обновляем персональные данные пользователя с id={} {}", id, updatePersonDto);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
 }

@@ -3,12 +3,14 @@ package com.temychp.fitccalc.services;
 import com.temychp.fitccalc.dto.LoginDto;
 import com.temychp.fitccalc.dto.PersonDto;
 import com.temychp.fitccalc.dto.RegistrationDto;
+import com.temychp.fitccalc.dto.UpdatePersonDto;
 import com.temychp.fitccalc.models.person.Gender;
 import com.temychp.fitccalc.models.person.Person;
 import com.temychp.fitccalc.models.person.Role;
 import com.temychp.fitccalc.repositories.PersonRepository;
 import com.temychp.fitccalc.util.convertors.PersonConvertor;
 import com.temychp.fitccalc.util.convertors.RegistrationConvertor;
+import com.temychp.fitccalc.util.convertors.UpdatePersonConvertor;
 import com.temychp.fitccalc.util.exceptions.AppException;
 import com.temychp.fitccalc.util.exceptions.PersonDuplicateException;
 import com.temychp.fitccalc.util.exceptions.PersonNotFoundException;
@@ -32,6 +34,8 @@ public class PersonService {
     private final PersonConvertor personConvertor;
 
     private final RegistrationConvertor registrationConvertor;
+
+    private final UpdatePersonConvertor updatePersonConvertor;
 
     private final PersonRepository personRepository;
 
@@ -57,14 +61,22 @@ public class PersonService {
             person.setCreatedAt(Instant.now());
         }
         person.setChangedAt(Instant.now());
-        person.setRole(Role.valueOf("USER"));
+        if (person.getRole().getPersonRole().equals("null")) {
+            person.setRole(Role.valueOf("USER"));
+        }
         person.setPassword(passwordEncoder.encode(person.getPassword()));
     }
 
     @Transactional
-    public void update(Long id, Person updatedPerson) {
-        updatedPerson.setId(id);
-        personRepository.save(updatedPerson);
+    public void update(UpdatePersonDto updatePersonDto) {
+        Long id = updatePersonDto.getId();
+
+        Person person = findOne(id);
+        person.setName(updatePersonDto.getName());
+        person.setEmail(updatePersonDto.getEmail());
+        person.setPassword(updatePersonDto.getPassword());
+
+        save(person);
     }
 
     @Transactional
@@ -197,7 +209,7 @@ public class PersonService {
 
     @Transactional
     public PersonDto register(RegistrationDto registrationDto) throws PersonDuplicateException {
-        Optional<Person> optionalPerson = personRepository.findByNameOrEmail(registrationDto.getName(),registrationDto.getEmail());
+        Optional<Person> optionalPerson = personRepository.findByNameOrEmail(registrationDto.getName(), registrationDto.getEmail());
 
         if (optionalPerson.isPresent()) {
             throw new PersonDuplicateException("Person already exists");

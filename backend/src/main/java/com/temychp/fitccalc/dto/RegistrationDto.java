@@ -1,5 +1,6 @@
 package com.temychp.fitccalc.dto;
 
+import com.temychp.fitccalc.models.person.Role;
 import com.temychp.fitccalc.util.validators.PasswordMatches;
 import com.temychp.fitccalc.util.validators.ValidEmail;
 import jakarta.validation.constraints.NotEmpty;
@@ -21,5 +22,7 @@ public final class RegistrationDto {
     @ValidEmail
     @NotEmpty
     private String email;
+
+    private Role role;
 
 }

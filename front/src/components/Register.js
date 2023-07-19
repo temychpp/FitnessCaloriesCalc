@@ -8,6 +8,7 @@ import {registerUrl, getUrl, post_rq} from "../core/urlResolver";
 
 async function postRegister(formData) {
     let body = JSON.stringify({
+        role: 'USER',
         name: formData.name,
         email: formData.email,
         password: formData.password,
@@ -28,6 +29,7 @@ export default function Register() {
         postRegister(values)
             .catch(_ => emitLoadingError('Ошибка регистрации'))
     }
+
 
     return (<>
         <h1>Регистрация</h1>

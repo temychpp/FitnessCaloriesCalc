@@ -2,7 +2,6 @@ import React from 'react';
 import UserMenu from "./UserMenu";
 import Login from "./Login";
 import {getAccount} from "../core/account";
-import Register from "./Register";
 
 export default function UserBlock() {
     const account = getAccount();
@@ -13,7 +12,6 @@ export default function UserBlock() {
     } else {
         return (<>
             <Login/>
-            <Register/>
         </>)
     }
 

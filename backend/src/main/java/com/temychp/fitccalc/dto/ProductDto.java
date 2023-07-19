@@ -9,6 +9,8 @@ import lombok.*;
 @ToString
 public final class ProductDto {
 
+    private Long id;
+
     @NotEmpty
     @NotNull
     private String name;
@@ -20,5 +22,8 @@ public final class ProductDto {
     private Float fat;
 
     private Float carbohydrates;
+
+    @NotNull
+    private Long createdUserId;
 
 }

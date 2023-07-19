@@ -40,7 +40,7 @@ public final class Product {
     @Column(name = "carbohydrates")
     private Float carbohydrates;
 
-    @NotEmpty
+    @NotNull
     @Column(name="created_person_id")
     private Long createdUserId;
 

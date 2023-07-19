@@ -8,7 +8,6 @@ import com.temychp.fitccalc.services.PersonService;
 import com.temychp.fitccalc.util.convertors.PersonActivityConvertor;
 import com.temychp.fitccalc.util.convertors.PersonAnthroConvertor;
 import com.temychp.fitccalc.util.convertors.PersonConvertor;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -32,14 +31,6 @@ public class PersonController {
     @GetMapping("/{id}")
     public PersonDto getPerson(@PathVariable("id") Long id) {
         return personConvertor.ModelToDto(personService.findOne(id));
-    }
-
-    @PatchMapping("/{id}")
-    public ResponseEntity<HttpStatus> update(@Valid PersonDto personDto,
-                                             @PathVariable("id") Long id) {
-        personService.update(id, personConvertor.DtoToModel(personDto));
-        log.info("Обновляем персональные данные пользователя с id={}", id);
-        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @GetMapping("/anthro")

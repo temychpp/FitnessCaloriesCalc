@@ -23,8 +23,8 @@ public class ProductService {
     }
 
     public Product findOne(Long id) {
-        Optional<Product> foundBook = productRepository.findById(id);
-        return foundBook.orElse(null);
+        Optional<Product> foundProduct = productRepository.findById(id);
+        return foundProduct.orElse(null);
     }
 
     @Transactional
@@ -44,7 +44,10 @@ public class ProductService {
     }
 
     public Optional<Product> findByName(String name) {
-        return productRepository.findByName(name);
+
+        Optional<Product> foundProduct = productRepository.findByName(name);
+        return foundProduct;
+
     }
 
     public List<Product> showProductsStartingWith(String startString) {
