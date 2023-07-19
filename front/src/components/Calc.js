@@ -3,7 +3,7 @@ import {Form, Input} from 'antd'
 import {emitCustomEvent} from "react-custom-events";
 import fetchWithTimeout from "../core/fetchWithTimeout";
 import {getAccount} from "../core/account";
-import {calcUrl, GET_REQUEST, getUrl} from "../core/urlResolver";
+import {calcUrl, get_rq, getUrl} from "../core/urlResolver";
 import {ERROR_EVENT, LOADED, START_LOADING} from "../core/loadEvents";
 
 const emitLoadingError = (message) => {
@@ -30,27 +30,27 @@ async function getAllCalculations(userId) {
 
 
 async function getBmi(userId) {
-    return fetchWithTimeout(getUrl(calcUrl, '/body_mass_index?id=' + userId), GET_REQUEST)
+    return fetchWithTimeout(getUrl(calcUrl, '/body_mass_index?id=' + userId), get_rq())
         .then(data => data.json())
 }
 
 async function getCaloriesMSJ(userId) {
-    return fetchWithTimeout(getUrl(calcUrl, '/calories_mifflin_stjeor?id=' + userId), GET_REQUEST)
+    return fetchWithTimeout(getUrl(calcUrl, '/calories_mifflin_stjeor?id=' + userId), get_rq())
         .then(data => data.json())
 }
 
 async function getIdealWeightLorenz(userId) {
-    return fetchWithTimeout(getUrl(calcUrl,'/ideal_weight_lorenz?id=' + userId), GET_REQUEST)
+    return fetchWithTimeout(getUrl(calcUrl,'/ideal_weight_lorenz?id=' + userId), get_rq())
         .then(data => data.json())
 }
 
 async function getIdealWeightDevine(userId) {
-    return fetchWithTimeout(getUrl(calcUrl, '/ideal_weight_devine?id=' + userId), GET_REQUEST)
+    return fetchWithTimeout(getUrl(calcUrl, '/ideal_weight_devine?id=' + userId), get_rq())
         .then(data => data.json())
 }
 
 async function getIdealWeightBroca(userId) {
-    return fetchWithTimeout(getUrl(calcUrl, '/ideal_weight_broca?id=' + userId), GET_REQUEST)
+    return fetchWithTimeout(getUrl(calcUrl, '/ideal_weight_broca?id=' + userId), get_rq())
         .then(data => data.json())
 }
 

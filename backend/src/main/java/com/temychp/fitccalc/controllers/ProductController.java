@@ -1,6 +1,7 @@
 package com.temychp.fitccalc.controllers;
 
 import com.temychp.fitccalc.dto.ProductDto;
+import com.temychp.fitccalc.models.product.Product;
 import com.temychp.fitccalc.services.ProductService;
 import com.temychp.fitccalc.util.convertors.ProductConvertor;
 import com.temychp.fitccalc.util.exceptions.PersonDuplicateException;
@@ -27,7 +28,7 @@ public class ProductController {
         ResponseEntity<ProductDto> result;
         try {
             productService.save(productConvertor.DtoToModel(productDto));
-            result = ResponseEntity.status(HttpStatus.OK).build();
+            result = ResponseEntity.status(HttpStatus.OK).body(productDto);
             log.info("Продукт сохранен в базу: {}", productDto);
 
         } catch (PersonDuplicateException e) {
@@ -56,6 +57,14 @@ public class ProductController {
         productService.update(id, productConvertor.DtoToModel(productDto));
         log.info("Обновляем продукт с id={}", id);
         return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @GetMapping("/{name}")
+    public ProductDto getProductByStartingLetter(@PathVariable("name") String name) {
+
+        Product product = productService.findByName(name).orElse(null);
+
+        return productConvertor.ModelToDto(product);
     }
 
 

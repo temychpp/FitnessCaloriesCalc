@@ -5,6 +5,14 @@ import {getAccount, wipeAccount} from "../core/account";
 import {emitCustomEvent} from "react-custom-events";
 import {ACCOUNT_UPDATE} from "../core/loadEvents";
 
+
+let reg = ''
+// if (getAccount().role === 'ADMIN')
+//     reg = {
+//         label: (<Link to='/adminRegister'>регистрация</Link>),
+//         key: 'adminRegister'
+//     }
+
 export default function UserMenu() {
 
     const onClick = (key) => {
@@ -16,21 +24,47 @@ export default function UserMenu() {
 
     const items = [
         {
-            label: (<Link to='/anthro'>Антропометрические данные</Link>),
-            key: 'anthro'
+            label:(<Link to='/home'>Еда</Link>),
+            key: 'dayMeal',
         },
-        {
-            label: (<Link to='/activity'>Активность</Link>),
-            key: 'activity'
-        },
+
         {
             label: (<Link to='/calc'>Расчеты</Link>),
             key: 'calc'
         },
         {
+            label: 'Продукты',
+            key: 'products',
+            children: [
+                {
+                    label: (<Link to='/product'>Создать продукт</Link>),
+                    key: 'product'
+                }
+            ]
+        },
+        {
+            label: 'Инфо',
+            key: 'info',
+            children: [
+                {
+                    label: (<Link to='/anthro'>Антропометрические данные</Link>),
+                    key: 'anthro'
+                },
+                {
+                    label: (<Link to='/activity'>Активность</Link>),
+                    key: 'activity'
+                },
+            ]
+        },
+
+        {
             label: (<Link to='/account'>{getAccount().name}</Link>),
             key: 'account',
             children: [
+                {
+                    label: (<Link to='/adminRegister'>регистрация</Link>),
+                    key: 'adminRegister'
+                },
                 {
                     label: 'Выйти',
                     key: 'logout'

@@ -3,7 +3,7 @@ import {Button, Form, Select, Input} from 'antd'
 import {emitCustomEvent} from "react-custom-events";
 import fetchWithTimeout from "../core/fetchWithTimeout";
 import {getAccount} from "../core/account";
-import {activityUrl, GET_REQUEST, getUrl, post_rq} from "../core/urlResolver";
+import {activityUrl, get_rq, getUrl, post_rq} from "../core/urlResolver";
 import {ERROR_EVENT, LOADED, START_LOADING} from "../core/loadEvents";
 
 const emitLoadingError = (message) => {
@@ -12,7 +12,7 @@ const emitLoadingError = (message) => {
 
 async function getActivity(userId) {
     emitCustomEvent(START_LOADING);
-    return fetchWithTimeout(getUrl(activityUrl, '?id=' + userId), GET_REQUEST)
+    return fetchWithTimeout(getUrl(activityUrl, '?id=' + userId), get_rq())
         .then(data => data.json())
         .finally(_ => {
             emitCustomEvent(LOADED);

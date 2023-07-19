@@ -9,6 +9,10 @@ import Calc from "./components/Calc";
 import Account from "./components/Account";
 import {useCustomEventListener} from "react-custom-events";
 import {ACCOUNT_UPDATE} from "./core/loadEvents";
+import Register from "./components/Register";
+import Product from "./components/Product";
+import AdminRegister from "./components/AdminRegister";
+import Home from "./components/Home";
 
 function App() {
     const [lastUpdate, setLastUpdate] = useState(Date.now())
@@ -30,6 +34,11 @@ function App() {
                 <Route path='/activity' element={<Activity/>}/>
                 <Route path='/calc' element={<Calc/>}/>
                 <Route path='/account' element={<Account/>}/>
+                <Route path='/product' element={<Product/>}/>
+                <Route path='/register' element={<Register/>}/>
+                <Route path='/adminRegister' element={<AdminRegister/>}/>
+                <Route path='/home' element={<Home/>}/>
+
             </Routes>
         </>
     )
