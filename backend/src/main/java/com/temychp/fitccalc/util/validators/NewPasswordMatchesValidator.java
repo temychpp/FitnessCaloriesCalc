@@ -24,8 +24,11 @@ public class NewPasswordMatchesValidator
 
     @Override
     public boolean isValid(Object obj, ConstraintValidatorContext context) {
+        if (!(obj instanceof UpdatePersonDto)) {
+            throw new IllegalArgumentException("не UpdatePersonDto!");
+        }
         UpdatePersonDto updatedPerson = (UpdatePersonDto) obj;
-        Long id = updatedPerson.getId();
+        Long id = personService.getPersonIdFromContext();
 
         Person person = personService.findOne(id);
         String oldBDPassword = person.getPassword();

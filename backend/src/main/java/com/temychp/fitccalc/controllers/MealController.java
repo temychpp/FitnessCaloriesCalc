@@ -25,7 +25,8 @@ public class MealController {
     public ResponseEntity<?> createMealByDay(@RequestBody @Valid PersonProductByDayDto personProductByDayDto) {
         ResponseEntity<?> result;
         try {
-            personProductByDayConvertor.DtoToModel(personProductByDayDto);
+
+            personProductByDayConvertor.dtoToModel(personProductByDayDto);
             result = ResponseEntity.status(HttpStatus.OK).build();
             log.info("Еда за день пользователя сохранена в базу: {}", personProductByDayDto);
         } catch (AppException e) {

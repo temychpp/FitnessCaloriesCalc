@@ -13,7 +13,6 @@ export const dayMealUrl = 'meal/mealbyday';
 
 export function get_rq() {
     let auth = ''
-    console.log(getAccount())
 
     if (getAccount() !== null) auth = 'Bearer ' + getAccount().token
 

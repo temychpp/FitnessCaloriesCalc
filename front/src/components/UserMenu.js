@@ -5,14 +5,6 @@ import {getAccount, wipeAccount} from "../core/account";
 import {emitCustomEvent} from "react-custom-events";
 import {ACCOUNT_UPDATE} from "../core/loadEvents";
 
-
-let reg = ''
-// if (getAccount().role === 'ADMIN')
-//     reg = {
-//         label: (<Link to='/adminRegister'>регистрация</Link>),
-//         key: 'adminRegister'
-//     }
-
 export default function UserMenu() {
 
     const onClick = (key) => {

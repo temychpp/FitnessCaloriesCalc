@@ -1,10 +1,3 @@
-// import React from 'react';
-//
-// export default function Account() {
-//     return (<h1>account settings</h1>)
-// }
-
-
 import React, {useEffect} from 'react';
 import {Button, Form, Select, Input} from 'antd'
 import {emitCustomEvent} from "react-custom-events";
@@ -12,8 +5,6 @@ import fetchWithTimeout from "../core/fetchWithTimeout";
 import {emitLoadingError, LOADED, START_LOADING} from "../core/loadEvents";
 import {updatePersonUrl, getUrl, patch_rq} from "../core/urlResolver";
 import {getAccount} from "../core/account";
-
-
 
 async function patchUpdate(formData) {
     let body = JSON.stringify({

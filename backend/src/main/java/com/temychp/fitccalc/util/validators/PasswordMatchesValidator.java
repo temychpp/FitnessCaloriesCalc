@@ -13,6 +13,9 @@ public class PasswordMatchesValidator
 
     @Override
     public boolean isValid(Object obj, ConstraintValidatorContext context) {
+        if (!(obj instanceof RegistrationDto)) {
+            throw new IllegalArgumentException("не RegistrationDto!");
+        }
         RegistrationDto person = (RegistrationDto) obj;
         return person.getPassword().equals(person.getConfirmPassword());
     }

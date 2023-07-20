@@ -12,11 +12,11 @@ public abstract class ConvertorDto<T, V> {
 
     private final ModelMapper modelMapper;
 
-    public T DtoToModel(V dto) {
+    public T dtoToModel(V dto) {
         return modelMapper.map(dto, modelClass);
     }
 
-    public V ModelToDto(T model) {
+    public V modelToDto(T model) {
         return modelMapper.map(model, dtoClass);
     }
 

@@ -14,8 +14,6 @@ import lombok.*;
 @ToString
 public final class PersonDto {
 
-    private Long id;
-
     @NotEmpty(message = "Name should not be empty")
     private String name;
 

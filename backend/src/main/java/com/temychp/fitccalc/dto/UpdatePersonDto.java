@@ -9,8 +9,6 @@ import lombok.Data;
 @Data
 public final class UpdatePersonDto {
 
-    private Long id;
-
     @NotEmpty
     private String name;
 
