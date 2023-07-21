@@ -29,28 +29,28 @@ async function getAllCalculations(userId) {
 }
 
 
-async function getBmi(userId) {
-    return fetchWithTimeout(getUrl(calcUrl, '/body_mass_index?id=' + userId), get_rq())
+async function getBmi() {
+    return fetchWithTimeout(getUrl(calcUrl, '/body_mass_index'), get_rq())
         .then(data => data.json())
 }
 
-async function getCaloriesMSJ(userId) {
-    return fetchWithTimeout(getUrl(calcUrl, '/calories_mifflin_stjeor?id=' + userId), get_rq())
+async function getCaloriesMSJ() {
+    return fetchWithTimeout(getUrl(calcUrl, '/calories_mifflin_stjeor'), get_rq())
         .then(data => data.json())
 }
 
-async function getIdealWeightLorenz(userId) {
-    return fetchWithTimeout(getUrl(calcUrl,'/ideal_weight_lorenz?id=' + userId), get_rq())
+async function getIdealWeightLorenz() {
+    return fetchWithTimeout(getUrl(calcUrl,'/ideal_weight_lorenz'), get_rq())
         .then(data => data.json())
 }
 
-async function getIdealWeightDevine(userId) {
-    return fetchWithTimeout(getUrl(calcUrl, '/ideal_weight_devine?id=' + userId), get_rq())
+async function getIdealWeightDevine() {
+    return fetchWithTimeout(getUrl(calcUrl, '/ideal_weight_devine'), get_rq())
         .then(data => data.json())
 }
 
-async function getIdealWeightBroca(userId) {
-    return fetchWithTimeout(getUrl(calcUrl, '/ideal_weight_broca?id=' + userId), get_rq())
+async function getIdealWeightBroca() {
+    return fetchWithTimeout(getUrl(calcUrl, '/ideal_weight_broca'), get_rq())
         .then(data => data.json())
 }
 

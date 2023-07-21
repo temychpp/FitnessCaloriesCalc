@@ -6,9 +6,9 @@ import {getAccount} from "../core/account";
 import {emitLoadingError, LOADED, START_LOADING} from "../core/loadEvents";
 import {createProductUrl, get_rq, getUrl, post_rq} from "../core/urlResolver";
 
-async function getProduct(productId) {
+async function getProduct() {
     emitCustomEvent(START_LOADING);
-    return fetchWithTimeout(getUrl(createProductUrl, '?id=' + productId), get_rq())
+    return fetchWithTimeout(getUrl(createProductUrl), get_rq())
         .then(data => data.json())
         .finally(_ => {
             emitCustomEvent(LOADED);
@@ -18,7 +18,6 @@ async function getProduct(productId) {
 
 async function postProduct(formData) {
     let body = JSON.stringify({
-        createdUserId:getAccount().id,
         name: formData.name,
         calories: formData.calories,
         protein: formData.protein,
@@ -54,8 +53,6 @@ export default function Product() {
         postProduct(values, account.id)
             .catch(_ => emitLoadingError('Ошибка сохранения продукта'))
     }
-
-
 
     return (<>
         <h1>Продукт</h1>

@@ -8,16 +8,15 @@ import {anthroUrl, get_rq, getUrl, post_rq} from "../core/urlResolver";
 
 async function getAnthro(userId) {
     emitCustomEvent(START_LOADING);
-    return fetchWithTimeout(getUrl(anthroUrl, '?id=' + userId), get_rq())
+    return fetchWithTimeout(getUrl(anthroUrl), get_rq())
         .then(data => data.json())
         .finally(_ => {
             emitCustomEvent(LOADED);
         })
 }
 
-async function postAnthro(formData, userId) {
+async function postAnthro(formData) {
     let body = JSON.stringify({
-        id: userId,
         age: formData.age,
         height: formData.height,
         weight: formData.weight,

@@ -13,7 +13,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -62,13 +65,23 @@ public class AuthController {
     }
 
     @PatchMapping("/update")
-    public ResponseEntity<HttpStatus> update(@RequestBody @Valid UpdatePersonDto updatePersonDto) {
-        log.info("updatePersonDto={}", updatePersonDto);
-        Long id = updatePersonDto.getId();
-
-        personService.update(updatePersonDto);
-        log.info("Обновляем персональные данные пользователя с id={} {}", id, updatePersonDto);
-        return ResponseEntity.ok(HttpStatus.OK);
+    public ResponseEntity<?> update(@RequestBody @Valid UpdatePersonDto updatePersonDto) {
+        ResponseEntity<?> result;
+        try {
+            Long id = personService.getPersonIdFromContext();
+            personService.update(updatePersonDto);
+            log.info("Обновляем персональные данные пользователя с id={} {}", id, updatePersonDto);
+            result = ResponseEntity.status(HttpStatus.OK).body(updatePersonDto);
+        } catch (PersonDuplicateException e) {
+            result = ResponseEntity.status(HttpStatus.CONFLICT).body(updatePersonDto);
+            log.info("Пользователь уже есть в базе {}", e.getMessage());
+        } catch (PersonNotFoundException e) {
+            result = ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            log.info("Ошибка в запросе!{}", e.getMessage());
+        } catch (Exception e) {
+            result = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            log.error("Ошибка сервера! {}", e.getMessage());
+        }
+        return result;
     }
-
 }

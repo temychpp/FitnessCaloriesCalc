@@ -10,19 +10,18 @@ const emitLoadingError = (message) => {
     emitCustomEvent(ERROR_EVENT, message);
 }
 
-async function getActivity(userId) {
+async function getActivity() {
     emitCustomEvent(START_LOADING);
-    return fetchWithTimeout(getUrl(activityUrl, '?id=' + userId), get_rq())
+    return fetchWithTimeout(getUrl(activityUrl), get_rq())
         .then(data => data.json())
         .finally(_ => {
             emitCustomEvent(LOADED);
         })
 }
 
-async function postActivity(formData, userId) {
+async function postActivity(formData) {
     emitCustomEvent(START_LOADING);
     let body = JSON.stringify({
-        id: userId,
         stepsByDay: formData.stepsByDay,
         fitnessByDay: formData.fitnessByDay,
         aerobicsByDay: formData.aerobicsByDay,

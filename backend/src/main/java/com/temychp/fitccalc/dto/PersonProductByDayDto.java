@@ -1,6 +1,7 @@
 package com.temychp.fitccalc.dto;
 
 import com.temychp.fitccalc.models.Meal;
+import com.temychp.fitccalc.models.product.Product;
 import lombok.*;
 
 @AllArgsConstructor
@@ -11,9 +12,7 @@ import lombok.*;
 @ToString
 public class PersonProductByDayDto {
 
-    private Integer person;
-
-    private Integer product;
+    private Product product;
 
     private int weight;
 

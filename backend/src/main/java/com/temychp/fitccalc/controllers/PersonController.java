@@ -8,6 +8,7 @@ import com.temychp.fitccalc.services.PersonService;
 import com.temychp.fitccalc.util.convertors.PersonActivityConvertor;
 import com.temychp.fitccalc.util.convertors.PersonAnthroConvertor;
 import com.temychp.fitccalc.util.convertors.PersonConvertor;
+import com.temychp.fitccalc.util.exceptions.PersonNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -30,12 +31,26 @@ public class PersonController {
 
     @GetMapping("/{id}")
     public PersonDto getPerson(@PathVariable("id") Long id) {
-        return personConvertor.ModelToDto(personService.findOne(id));
+        return personConvertor.modelToDto(personService.findOne(id));
     }
 
     @GetMapping("/anthro")
-    public PersonAnthropometryDto getAnthro(@RequestParam(value = "id") Long id) {
-        return personAnthroConvertor.ModelToDto(personService.findOne(id).getPersonAnthropometry());
+    public  ResponseEntity<PersonAnthropometryDto> getAnthro() {
+        ResponseEntity<PersonAnthropometryDto> result;
+        try {
+            Long id = personService.getPersonIdFromContext();
+            Person person = personService.findOne(id);
+            PersonAnthropometryDto anthropometryDto = personAnthroConvertor.modelToDto(person.getPersonAnthropometry());
+            result = ResponseEntity.status(HttpStatus.OK).body(anthropometryDto);
+        } catch (PersonNotFoundException e) {
+            result = ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            log.info("Ошибка в запросе!{}", e.getMessage());
+        } catch (Exception e) {
+            result = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            log.error("Ошибка сервера! {}", e.getMessage());
+        }
+        return result;
+
     }
 
     @PostMapping("/anthro")
@@ -43,13 +58,15 @@ public class PersonController {
             @RequestBody PersonAnthropometryDto personAnthropometryDto) {
         ResponseEntity<PersonAnthropometryDto> result;
         try {
-            Long id= personAnthropometryDto.getId();
+            Long id = personService.getPersonIdFromContext();
             Person person = personService.findOne(id);
-            person.setPersonAnthropometry(personAnthroConvertor.DtoToModel(personAnthropometryDto));
+            person.setPersonAnthropometry(personAnthroConvertor.dtoToModel(personAnthropometryDto));
             personService.save(person);
             result = ResponseEntity.status(HttpStatus.OK).build();
             log.info("Антропометрия пользователя id={} сохранена в базу: {}", id, personAnthropometryDto);
-
+        } catch (PersonNotFoundException e) {
+            result = ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            log.info("Ошибка в запросе!{}", e.getMessage());
         } catch (Exception e) {
             result = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
             log.error("Ошибка сервера! {}", e.getMessage());
@@ -58,8 +75,21 @@ public class PersonController {
     }
 
     @GetMapping("/activity")
-    public PersonActivityDto getActivity(@RequestParam(value = "id") Long id) {
-        return personActivityConvertor.ModelToDto(personService.findOne(id).getPersonActivity());
+    public ResponseEntity<PersonActivityDto> getActivity() {
+        ResponseEntity<PersonActivityDto> result;
+        try {
+            Long id = personService.getPersonIdFromContext();
+            Person person = personService.findOne(id);
+            PersonActivityDto activityDto = personActivityConvertor.modelToDto(person.getPersonActivity());
+            result = ResponseEntity.status(HttpStatus.OK).body(activityDto);
+        } catch (PersonNotFoundException e) {
+            result = ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            log.info("Ошибка в запросе!{}", e.getMessage());
+        } catch (Exception e) {
+            result = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            log.error("Ошибка сервера! {}", e.getMessage());
+        }
+        return result;
     }
 
     @PostMapping("/activity")
@@ -67,13 +97,15 @@ public class PersonController {
             @RequestBody PersonActivityDto personActivityDto) {
         ResponseEntity<PersonActivityDto> result;
         try {
-            Long id= personActivityDto.getId();
+            Long id = personService.getPersonIdFromContext();
             Person person = personService.findOne(id);
-            person.setPersonActivity(personActivityConvertor.DtoToModel(personActivityDto));
+            person.setPersonActivity(personActivityConvertor.dtoToModel(personActivityDto));
             personService.save(person);
             result = ResponseEntity.status(HttpStatus.OK).build();
             log.info("Активность пользователя{} сохранена в базу: {}", id, personActivityDto);
-
+        } catch (PersonNotFoundException e) {
+            result = ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            log.info("Ошибка в запросе!{}", e.getMessage());
         } catch (Exception e) {
             result = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
             log.error("Ошибка сервера! {}", e.getMessage());

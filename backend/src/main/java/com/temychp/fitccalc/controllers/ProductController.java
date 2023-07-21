@@ -27,7 +27,7 @@ public class ProductController {
     public ResponseEntity<ProductDto> create(@RequestBody @Valid ProductDto productDto) {
         ResponseEntity<ProductDto> result;
         try {
-            productService.save(productConvertor.DtoToModel(productDto));
+            productService.save(productConvertor.dtoToModel(productDto));
             result = ResponseEntity.status(HttpStatus.OK).body(productDto);
             log.info("Продукт сохранен в базу: {}", productDto);
 
@@ -48,13 +48,13 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public ProductDto getProduct(@PathVariable("id") Long id) {
-        return productConvertor.ModelToDto(productService.findOne(id));
+        return productConvertor.modelToDto(productService.findOne(id));
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<HttpStatus> update(@Valid ProductDto productDto,
                                              @PathVariable("id") Long id) {
-        productService.update(id, productConvertor.DtoToModel(productDto));
+        productService.update(id, productConvertor.dtoToModel(productDto));
         log.info("Обновляем продукт с id={}", id);
         return ResponseEntity.ok(HttpStatus.OK);
     }
@@ -64,7 +64,7 @@ public class ProductController {
 
         Product product = productService.findByName(name).orElse(null);
 
-        return productConvertor.ModelToDto(product);
+        return productConvertor.modelToDto(product);
     }
 
 
